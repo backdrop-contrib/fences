@@ -1,0 +1,4 @@
+name = Fences
+description = Configurable field wrappers
+
+files[] = fences.module
