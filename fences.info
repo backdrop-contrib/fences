@@ -1,4 +1,6 @@
 name = Fences
 description = Configurable field wrappers
 
+core = 7.x
+
 files[] = fences.module

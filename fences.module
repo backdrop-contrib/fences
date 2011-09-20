@@ -4,3 +4,18 @@
  * Fences is a module providing configurable field wrappers.
  */
 
+function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
+  dpm($form);
+  $form['instance']['wrapper_suggestion'] = array(
+    '#type' => 'fieldset', 
+    '#title' => t('Fences field suggestion configuration'), 
+    '#collapsible' => TRUE,
+    '#collapsed' => FALSE,
+  );
+  $form['instance']['wrapper_suggestion']['suggestion'] = array(
+    '#type' => 'textfield', 
+    '#title' => t('Field wrapper suggestion'), 
+    '#default_value' => 'div',
+    '#description' => t('Select the wrapping suggestion for this field.')
+  );
+}

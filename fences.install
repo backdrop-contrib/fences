@@ -1,0 +1,48 @@
+<?php
+/**
+ * @file
+ * Provides install, update and un-install functions for menu_position.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+
+function fences_schema() {
+  $schema['fences'] = array(
+    'description' => 'Stores field wrapper configuration.',
+    'fields' => array(
+      'wid' => array(
+        'description' => 'The primary identifier for a wrapper suggestion.',
+        'type' => 'serial',
+        'not null' => TRUE,
+      ),
+      'ctid' => array(
+        'description' => 'The parent content type for this suggestion.',
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'fid' => array(
+        'description' => 'The field that this suggestion is linked to.',
+        'type' => 'int',
+        'default' => NULL,
+      ),
+      'machine_name' => array(
+        'description' => 'The machine name for this suggestion.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
+    ),
+    'primary key' => array('wid'),
+  );
+
+  return $schema;
+}
+
+/**
+ * Set the initial database schema ID.
+ */
+function fences_update_7100() {
+  // No-op.
+}
