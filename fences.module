@@ -19,3 +19,37 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
     '#description' => t('Select the wrapping suggestion for this field.')
   );
 }
+
+
+/**
+ * Alter the views field item form to change some of the default values.
+ * @todo: Make this actually work. Currently cannot change the value from
+ * the default value.
+ */
+function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
+  //dpm($form);
+  // Disable the label option
+  $form['options']['custom_label']['#default_value'] = FALSE;
+  
+  // Set the field settings to use the field_api for rendering.
+  $form['options']['field_api_classes']['#default_value'] = TRUE;
+  
+  // Disable the default element classes
+  $form['options']['element_default_classes']['#default_value'] = FALSE;
+  
+  // Enable the element_wrapper style to be none
+  $form['options']['element_wrapper_type_enable']['#default_value'] = TRUE;
+  $form['options']['element_wrapper_type']['#default_value'] = 0;
+  
+  // Enable the element_type style to be none
+  $form['options']['element_type_enable']['#default_value'] = TRUE;
+  $form['options']['element_type']['#default_value'] = 0;
+}
+
+/**
+ * @todo: Make this actually work. Currently cannot change the value from
+ * the default value.
+ */
+function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $form_id) {
+  $form['options']['row_options']['default_field_elements']['#default_value'] = 0;
+}
