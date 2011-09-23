@@ -22,6 +22,6 @@
     </h3>
   <?php endif; ?>
     
-  <?php print render($items[0]§); ?>
+  <?php print render($items[0]); ?>
 
 </pre>

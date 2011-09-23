@@ -23,7 +23,7 @@
   <?php endif; ?>
     
   <code>
-    <?php print render($items[0]§); ?>
+    <?php print render($items[0]); ?>
   </code>
 
 </pre>
