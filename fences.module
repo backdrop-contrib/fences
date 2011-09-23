@@ -27,7 +27,6 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
  * the default value.
  */
 function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
-  //dpm($form);
   // Disable the label option
   $form['options']['custom_label']['#default_value'] = FALSE;
   
