@@ -9,7 +9,7 @@
  *
  */
 ?>
-<div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<small class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <?php if ($element['#label_display'] == 'inline'): ?>
     <span class="field-label <?php print $title_attributes; ?>">
@@ -27,4 +27,4 @@
     </div>
   <?php endforeach; ?>
 
-</div>
+</small>
