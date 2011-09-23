@@ -10,7 +10,7 @@
  * 
  */
 ?>
-<div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<address class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
 
   <?php if ($element['#label_display'] == 'inline'): ?>
     <span class="field-label <?php print $title_attributes; ?>">
@@ -24,9 +24,9 @@
   
 
   <?php foreach ($items as $delta => $item) : ?>
-    <address class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
+    <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
       <?php print render($item); ?>
-    </address>
+    </div>
   <?php endforeach; ?>
 
-</div>
+</address>
