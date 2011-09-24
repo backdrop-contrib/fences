@@ -122,12 +122,14 @@ function fences_preprocess_field(&$vars) {
   $machine_name = $vars['element']['#bundle'] . '_' . $vars['element']['#field_name'];
   $fence = fences_get_fence($machine_name);
   if ($fence) {
-    $theme_suggestions[0] = 'field__fences_' . $fence;
-    foreach ($vars['theme_hook_suggestions'] as $key => $value) {
-      $theme_suggestions[$key+1] = $value;
-    }
-    $vars['theme_hook_suggestions'] = $theme_suggestions;
+    // $theme_suggestions[0] = 'field__fences_' . $fence;
+    // foreach ($vars['theme_hook_suggestions'] as $key => $value) {
+    //   $theme_suggestions[$key+1] = $value;
+    // }
+    // $vars['theme_hook_suggestions'] = $theme_suggestions;
     // or maybe it just needs:
-    // $vars['theme_hook_suggestions'][] = 'field__fences_' . $fence;
+    $vars['theme_hook_suggestions'][] = 'field__fences_' . $fence;
+    $vars['template_files'][] = 'field--fences-' . $fence;
+    dpm($vars);
   }
 }
