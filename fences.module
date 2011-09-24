@@ -4,8 +4,14 @@
  * Fences is a module providing configurable field wrappers.
  */
 
+
+/**
+ * Implements hook_form_alter()
+ */
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
-  dpm($form);
+  $machine_name = build_machine_name($form_state);
+  $existing_item = fences_get_fence($machine_name);
+
   $form['instance']['wrapper_suggestion'] = array(
     '#type' => 'fieldset', 
     '#title' => t('Fences field suggestion configuration'), 
@@ -15,11 +21,67 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
   $form['instance']['wrapper_suggestion']['suggestion'] = array(
     '#type' => 'textfield', 
     '#title' => t('Field wrapper suggestion'), 
-    '#default_value' => 'div',
-    '#description' => t('Select the wrapping suggestion for this field.')
+    '#default_value' => $existing_item ? $existing_item : 'div',
+    '#description' => t('Select the wrapping suggestion for this field.'),
   );
+  $form['#submit'][] = 'fences_form_submit';
 }
 
+/**
+ * Implements hook_form_submit() 
+ */
+function fences_form_submit(&$form, &$form_state) {
+  fences_update_suggestion($form_state);
+}
+
+/**
+ * Function to return the wrapper suggestion if it exists.
+ */
+function fences_get_fence($machine_name) {
+  if ($machine_name) {
+    $existing_item = db_query("SELECT suggestion FROM {fences} WHERE machine_name = :machine_name", array(':machine_name' => $machine_name))->fetchAssoc();
+  }
+  return $existing_item['suggestion'];
+}
+
+/**
+ * Builds the machine_name variable.
+ */
+function build_machine_name($form_state) {
+  $field_name = $form_state['build_info']['args'][0]['field_name'];
+  $machine_name = $form_state['build_info']['args'][0]['bundle'] . '_' . $field_name;
+  return $machine_name;
+}
+
+/**
+ * Function to update the fences database table.
+ */
+function fences_update_suggestion($form_state) {
+  $field_name = $form_state['build_info']['args'][0]['field_name'];
+  $machine_name = build_machine_name($form_state);
+  $fence = array(
+    'bundle'        => $form_state['build_info']['args'][0]['bundle'],
+    'fid'           => $form_state['build_info']['args'][0]['field_id'],
+    'field_name'    => $field_name,
+    'suggestion'    => $form_state['input']['instance']['wrapper_suggestion']['suggestion'],
+    'machine_name'  => $machine_name,
+  );
+
+  $existing_item = fences_get_fence($machine_name);
+
+  if ($existing_item) {
+    db_update('fences')
+      ->fields($fence)
+      ->condition('machine_name', $fence['machine_name'])
+      ->execute();    
+  }
+  else {
+    $wid = db_insert('fences')
+      ->fields($fence)
+      ->execute();
+  }
+
+}
 
 /**
  * Alter the views field item form to change some of the default values.
@@ -52,4 +114,21 @@ function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form
  */
 function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $form_id) {
   $form['options']['row_options']['default_field_elements']['#default_value'] = 0;
+}
+
+/**
+ * Implements hook_preprocess_field()
+ */
+function fences_preprocess_field(&$vars) { 
+  $machine_name = $vars['element']['#bundle'] . '_' . $vars['element']['#field_name'];
+  $fence = fences_get_fence($machine_name);
+  if ($fence) {
+    $theme_suggestions[0] = 'field__fences_' . $fence;
+    foreach ($vars['theme_hook_suggestions'] as $key => $value) {
+      $theme_suggestions[$key+1] = $value;
+    }
+    $vars['theme_hook_suggestions'] = $theme_suggestions;
+    // or maybe it just needs:
+    // $vars['theme_hook_suggestions'][] = 'field__fences_' . $fence;
+  }
 }

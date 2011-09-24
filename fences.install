@@ -17,9 +17,10 @@ function fences_schema() {
         'type' => 'serial',
         'not null' => TRUE,
       ),
-      'ctid' => array(
+      'bundle' => array(
         'description' => 'The parent content type for this suggestion.',
-        'type' => 'int',
+        'type' => 'varchar',
+        'length' => 255,
         'default' => NULL,
       ),
       'fid' => array(
@@ -27,6 +28,18 @@ function fences_schema() {
         'type' => 'int',
         'default' => NULL,
       ),
+      'suggestion' => array(
+        'desctiption' => 'The wrapper suggestion itself.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
+      'field_name' => array(
+        'desctiption' => 'The name of the field.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),      
       'machine_name' => array(
         'description' => 'The machine name for this suggestion.',
         'type' => 'varchar',
