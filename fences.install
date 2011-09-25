@@ -7,7 +7,6 @@
 /**
  * Implements hook_schema().
  */
-
 function fences_schema() {
   $schema['fences'] = array(
     'description' => 'Stores field wrapper configuration.',
@@ -16,6 +15,12 @@ function fences_schema() {
         'description' => 'The primary identifier for a wrapper suggestion.',
         'type' => 'serial',
         'not null' => TRUE,
+      ),
+      'machine_name' => array(
+        'description' => 'The machine name for this suggestion.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
       ),
       'bundle' => array(
         'description' => 'The parent content type for this suggestion.',
@@ -28,26 +33,56 @@ function fences_schema() {
         'type' => 'int',
         'default' => NULL,
       ),
+      'field_name' => array(
+        'desctiption' => 'The name of the field.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
       'suggestion' => array(
         'desctiption' => 'The wrapper suggestion itself.',
         'type' => 'varchar',
         'length' => 255,
         'default' => NULL,
       ),
-      'field_name' => array(
-        'desctiption' => 'The name of the field.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),      
+    ),
+    'primary key' => array('wid'),
+  );
+  $schema['fences_suggestions'] = array(
+    'description' => 'Stores field wrapper suggestions.',
+    'fields' => array(
       'machine_name' => array(
         'description' => 'The machine name for this suggestion.',
         'type' => 'varchar',
         'length' => 255,
         'default' => NULL,
       ),
+      'theme_hook' => array(
+        'desctiption' => 'The theme hook the suggestion is for.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => 'field',
+      ),
+      'suggestion' => array(
+        'desctiption' => 'The wrapper suggestion itself.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
+      'suggestion_name' => array(
+        'desctiption' => 'A short name describing the markup in the template.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
+      'suggestion_description' => array(
+        'desctiption' => 'A long description of the markup in the template.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
     ),
-    'primary key' => array('wid'),
+    'primary key' => array('suggestion'),
   );
 
   return $schema;
