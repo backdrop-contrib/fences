@@ -128,8 +128,30 @@ function fences_preprocess_field(&$vars) {
     // }
     // $vars['theme_hook_suggestions'] = $theme_suggestions;
     // or maybe it just needs:
-    $vars['theme_hook_suggestions'][] = 'field__fences_' . $fence;
-    $vars['template_files'][] = 'field--fences-' . $fence;
-    dpm($vars);
+    array_unshift($vars['theme_hook_suggestions'],'field__fences_' . $fence);
+    // $theme = theme('field__fences_small', $vars);
+    // dpm($vars);
+    // dpm($theme);
   }
+}
+
+
+/**
+ * Implementation of hook_theme().
+ */
+function fences_theme($existing, $type, $theme, $path) {
+  dpm($type);
+  dpm($theme);
+  dpm($path);
+  dpm($existing);
+  // Supplying $fence_type here, but I would like it to be dynamicly set.
+  $fence_type = 'small';
+  return array(
+    'field__fences_' . $fence_type => array(
+      'render element' => 'field',
+      'template' => 'field--fences-' . $fence_type,
+      // this will set to module/theme path by default:
+      'path' => drupal_get_path('module', 'fences') . '/templates',
+    ),
+  );
 }
