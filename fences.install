@@ -45,6 +45,18 @@ function fences_schema() {
         'length' => 255,
         'default' => NULL,
       ),
+      'suggestion_name' => array(
+        'desctiption' => 'A short name describing the markup in the template.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
+      'suggestion_description' => array(
+        'desctiption' => 'A long description of the markup in the template.',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => NULL,
+      ),
     ),
     'primary key' => array('wid'),
   );
