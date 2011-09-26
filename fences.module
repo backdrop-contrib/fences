@@ -33,7 +33,12 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
  * Implements hook_form_submit() 
  */
 function fences_form_submit(&$form, &$form_state) {
-  fences_update_suggestion($form_state);
+  $bundle = $form_state['build_info']['args'][0]['bundle'];
+  $fid = $form_state['build_info']['args'][0]['field_id'];
+  $field_name = $form_state['build_info']['args'][0]['field_name'];
+  $suggestion = $form_state['input']['instance']['wrapper_suggestion']['suggestion'];
+
+  fences_update_fence_configuration($bundle, $fid, $field_name, $suggestion);
 }
 
 /**
@@ -56,16 +61,13 @@ function fences_get_suggestion($bundle, $field_name) {
 /**
  * Function to update the fences database table.
  */
-function fences_update_suggestion($form_state) {
-  $bundle = $form_state['build_info']['args'][0]['bundle'];
-  $field_name = $form_state['build_info']['args'][0]['field_name'];
-  $machine_name = $bundle . '_' . $field_name;
+function fences_update_fence_configuration($bundle, $fid, $field_name, $suggestion) {
   $fence = array(
-    'bundle'        => $form_state['build_info']['args'][0]['bundle'],
-    'fid'           => $form_state['build_info']['args'][0]['field_id'],
+    'bundle'        => $bundle,
+    'machine_name'  => $bundle . '_' . $field_name,
+    'fid'           => $fid,
     'field_name'    => $field_name,
-    'suggestion'    => $form_state['input']['instance']['wrapper_suggestion']['suggestion'],
-    'machine_name'  => $machine_name,
+    'suggestion'    => $suggestion,
   );
 
   $suggestion = fences_get_suggestion($bundle, $field_name);
