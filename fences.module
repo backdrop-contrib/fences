@@ -9,7 +9,9 @@
  * Implements hook_form_alter()
  */
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
-  $machine_name = build_machine_name($form_state);
+  $bundle = $form_state['build_info']['args'][0]['bundle'];
+  $field_name = $form_state['build_info']['args'][0]['field_name'];
+  $machine_name = $bundle . '_' . $field_name;
   $existing_item = fences_get_fence($machine_name);
 
   $form['instance']['wrapper_suggestion'] = array(
@@ -45,20 +47,12 @@ function fences_get_fence($machine_name) {
 }
 
 /**
- * Builds the machine_name variable.
- */
-function build_machine_name($form_state) {
-  $field_name = $form_state['build_info']['args'][0]['field_name'];
-  $machine_name = $form_state['build_info']['args'][0]['bundle'] . '_' . $field_name;
-  return $machine_name;
-}
-
-/**
  * Function to update the fences database table.
  */
 function fences_update_suggestion($form_state) {
+  $bundle = $form_state['build_info']['args'][0]['bundle'];
   $field_name = $form_state['build_info']['args'][0]['field_name'];
-  $machine_name = build_machine_name($form_state);
+  $machine_name = $bundle . '_' . $field_name;
   $fence = array(
     'bundle'        => $form_state['build_info']['args'][0]['bundle'],
     'fid'           => $form_state['build_info']['args'][0]['field_id'],
