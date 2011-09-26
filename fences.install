@@ -63,7 +63,7 @@ function fences_schema() {
         'length' => 255,
         'default' => 'field',
       ),
-      'suggestion' => array(
+      'theme_hook_suggestion' => array(
         'desctiption' => 'The wrapper suggestion itself.',
         'type' => 'varchar',
         'length' => 255,
