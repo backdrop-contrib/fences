@@ -11,8 +11,8 @@
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
   $bundle = $form_state['build_info']['args'][0]['bundle'];
   $field_name = $form_state['build_info']['args'][0]['field_name'];
-  $machine_name = $bundle . '_' . $field_name;
-  $existing_item = fences_get_fence($machine_name);
+
+  $suggestion = fences_get_suggestion($bundle, $field_name);
 
   $form['instance']['wrapper_suggestion'] = array(
     '#type' => 'fieldset', 
@@ -23,7 +23,7 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
   $form['instance']['wrapper_suggestion']['suggestion'] = array(
     '#type' => 'textfield', 
     '#title' => t('Field wrapper suggestion'), 
-    '#default_value' => $existing_item ? $existing_item : 'div',
+    '#default_value' => $suggestion ? $suggestion : 'div',
     '#description' => t('Select the wrapping suggestion for this field.'),
   );
   $form['#submit'][] = 'fences_form_submit';
@@ -39,11 +39,18 @@ function fences_form_submit(&$form, &$form_state) {
 /**
  * Function to return the wrapper suggestion if it exists.
  */
-function fences_get_fence($machine_name) {
-  if ($machine_name) {
-    $existing_item = db_query("SELECT suggestion FROM {fences} WHERE machine_name = :machine_name", array(':machine_name' => $machine_name))->fetchAssoc();
+function fences_get_suggestion($bundle, $field_name) {
+  // On any page load, we are likely to have several fields, so we retrieve and
+  // cache all field suggestions.
+  $fences = &drupal_static(__FUNCTION__);
+  if (is_null($fences)) {
+    $fences = array();
+    $result = db_query('SELECT bundle, field_name, suggestion FROM {fences}');
+    foreach ($result as $row) {
+      $fences[$row->bundle][$row->field_name] = $row->suggestion;
+    }
   }
-  return $existing_item['suggestion'];
+  return isset($fences[$bundle][$field_name]) ? $fences[$bundle][$field_name] : NULL;
 }
 
 /**
@@ -61,9 +68,9 @@ function fences_update_suggestion($form_state) {
     'machine_name'  => $machine_name,
   );
 
-  $existing_item = fences_get_fence($machine_name);
+  $suggestion = fences_get_suggestion($bundle, $field_name);
 
-  if ($existing_item) {
+  if ($suggestion) {
     db_update('fences')
       ->fields($fence)
       ->condition('machine_name', $fence['machine_name'])
@@ -113,16 +120,17 @@ function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $for
  * Implements hook_preprocess_field()
  */
 function fences_preprocess_field(&$vars) { 
-  $machine_name = $vars['element']['#bundle'] . '_' . $vars['element']['#field_name'];
-  $fence = fences_get_fence($machine_name);
-  if ($fence) {
-    // $theme_suggestions[0] = 'field__fences_' . $fence;
+  $bundle = $vars['element']['#bundle'];
+  $field_name = $vars['element']['#field_name'];
+  $suggestion = fences_get_suggestion($bundle, $field_name);
+  if ($suggestion) {
+    // $theme_suggestions[0] = 'field__fences_' . $suggestion;
     // foreach ($vars['theme_hook_suggestions'] as $key => $value) {
     //   $theme_suggestions[$key+1] = $value;
     // }
     // $vars['theme_hook_suggestions'] = $theme_suggestions;
     // or maybe it just needs:
-    array_unshift($vars['theme_hook_suggestions'],'field__fences_' . $fence);
+    array_unshift($vars['theme_hook_suggestions'],'field__fences_' . $suggestion);
     // $theme = theme('field__fences_small', $vars);
     // dpm($vars);
     // dpm($theme);
