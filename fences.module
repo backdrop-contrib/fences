@@ -14,17 +14,11 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
 
   $suggestion = fences_get_suggestion($bundle, $field_name);
 
-  $form['instance']['wrapper_suggestion'] = array(
-    '#type' => 'fieldset', 
-    '#title' => t('Fences field suggestion configuration'), 
-    '#collapsible' => TRUE,
-    '#collapsed' => FALSE,
-  );
-  $form['instance']['wrapper_suggestion']['suggestion'] = array(
+  $form['instance']['fences_wrapper'] = array(
     '#type' => 'textfield', 
-    '#title' => t('Field wrapper suggestion'), 
+    '#title' => t('Wrapper markup'),
     '#default_value' => $suggestion ? $suggestion : 'div',
-    '#description' => t('Select the wrapping suggestion for this field.'),
+    '#description' => t('Choose the HTML to use to wrap the field.'),
   );
   $form['#submit'][] = 'fences_form_submit';
 }
@@ -36,7 +30,7 @@ function fences_form_submit(&$form, &$form_state) {
   $bundle = $form_state['build_info']['args'][0]['bundle'];
   $fid = $form_state['build_info']['args'][0]['field_id'];
   $field_name = $form_state['build_info']['args'][0]['field_name'];
-  $suggestion = $form_state['input']['instance']['wrapper_suggestion']['suggestion'];
+  $suggestion = $form_state['input']['instance']['fences_wrapper'];
 
   fences_update_fence_configuration($bundle, $fid, $field_name, $suggestion);
 }
