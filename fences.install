@@ -34,13 +34,13 @@ function fences_schema() {
         'default' => NULL,
       ),
       'field_name' => array(
-        'desctiption' => 'The name of the field.',
+        'description' => 'The name of the field.',
         'type' => 'varchar',
         'length' => 255,
         'default' => NULL,
       ),
       'suggestion' => array(
-        'desctiption' => 'The wrapper suggestion itself.',
+        'description' => 'The wrapper suggestion itself.',
         'type' => 'varchar',
         'length' => 255,
         'default' => NULL,
