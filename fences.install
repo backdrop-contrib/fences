@@ -11,7 +11,7 @@ function fences_schema() {
   $schema['fences'] = array(
     'description' => 'Stores field wrapper configuration.',
     'fields' => array(
-      'wid' => array(
+      'fences_id' => array(
         'description' => 'The primary identifier for a wrapper suggestion.',
         'type' => 'serial',
         'not null' => TRUE,
@@ -46,7 +46,7 @@ function fences_schema() {
         'default' => NULL,
       ),
     ),
-    'primary key' => array('wid'),
+    'primary key' => array('fences_id'),
   );
   $schema['fences_suggestions'] = array(
     'description' => 'Stores field wrapper suggestions.',
