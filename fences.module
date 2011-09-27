@@ -148,7 +148,7 @@ function fences_theme($existing, $type, $theme, $path) {
   dpm($theme);
   dpm($path);
   dpm($existing);
-  // Supplying $fence_type here, but I would like it to be dynamicly set.
+  // Supplying $fence_type here, but I would like it to be dynamically set.
   $fence_type = 'small';
   return array(
     'field__fences_' . $fence_type => array(
