@@ -48,43 +48,6 @@ function fences_schema() {
     ),
     'primary key' => array('fences_id'),
   );
-  $schema['fences_suggestions'] = array(
-    'description' => 'Stores field wrapper suggestions.',
-    'fields' => array(
-      'machine_name' => array(
-        'description' => 'The machine name for this suggestion.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-      'theme_hook' => array(
-        'desctiption' => 'The theme hook the suggestion is for.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => 'field',
-      ),
-      'theme_hook_suggestion' => array(
-        'desctiption' => 'The wrapper suggestion itself.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-      'suggestion_name' => array(
-        'desctiption' => 'A short name describing the markup in the template.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-      'suggestion_description' => array(
-        'desctiption' => 'A long description of the markup in the template.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-    ),
-    'primary key' => array('suggestion'),
-  );
-
   return $schema;
 }
 
