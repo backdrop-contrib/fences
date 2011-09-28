@@ -123,20 +123,18 @@ function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $for
  * Implements hook_preprocess_field()
  */
 function fences_preprocess_field(&$vars) {
+  // Retrieve the configured suggestion.
   $bundle = $vars['element']['#bundle'];
   $field_name = $vars['element']['#field_name'];
   $suggestion = fences_get_suggestion($bundle, $field_name);
   if ($suggestion) {
-    // $theme_suggestions[0] = 'field__fences_' . $suggestion;
-    // foreach ($vars['theme_hook_suggestions'] as $key => $value) {
-    //   $theme_suggestions[$key+1] = $value;
-    // }
-    // $vars['theme_hook_suggestions'] = $theme_suggestions;
-    // or maybe it just needs:
-    array_unshift($vars['theme_hook_suggestions'],'field__fences_' . $suggestion);
-    // $theme = theme('field__fences_small', $vars);
-    // dpm($vars);
-    // dpm($theme);
+    // Place the suggestion at the front of the queue.
+    $suggestion = 'field__fences_' . $suggestion;
+    array_unshift($vars['theme_hook_suggestions'], $suggestion);
+    // Add a "-multiple" suggestion if there are more than one field items.
+    if (count($vars['items']) > 1) {
+      array_unshift($vars['theme_hook_suggestions'], $suggestion . '_multiple');
+    }
   }
 }
 
