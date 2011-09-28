@@ -14,10 +14,17 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
 
   $suggestion = fences_get_suggestion($bundle, $field_name);
 
+  // Get the list of suggestions.
+  $fences = fences_get_fences_suggestion_info();
+  foreach (array_keys($fences['field']) as $key) {
+    $options[$key] = $fences['field'][$key]['label'];
+  }
+
   $form['instance']['fences_wrapper'] = array(
-    '#type' => 'textfield', 
+    '#type' => 'select',
     '#title' => t('Wrapper markup'),
     '#default_value' => $suggestion ? $suggestion : 'div',
+    '#options' => $options,
     '#description' => t('Choose the HTML to use to wrap the field.'),
   );
   $form['#submit'][] = 'fences_form_submit';
@@ -152,4 +159,54 @@ function fences_theme($existing, $type, $theme, $path) {
       'path' => drupal_get_path('module', 'fences') . '/templates',
     ),
   );
+}
+
+/**
+ * Retrieve the hook_fences_suggestion_info data.
+ */
+function fences_get_fences_suggestion_info() {
+  $fences = module_invoke_all('fences_suggestion_info');
+
+  // Allow modules and themes to alter the fences info.
+  drupal_alter('fences_suggestion_info', $fences);
+
+  return $fences;
+}
+
+/**
+ * Implements hook_fences_suggestion_info().
+ */
+function fences_fences_suggestion_info() {
+  // Suggestions for the "field" theme hook.
+  $fences['field'] = array(
+    'none' => array(
+      'label' => t('No markup'),
+      'description' => t('No wrapping HTML'),
+    ),
+    'address' => array(
+      'label' => t('address'),
+      'description' => t('An <address> tag'),
+    ),
+    'div' => array(
+      'label' => t('div'),
+      'description' => t('A semantically generic <div> tag. Should only be used as a last resort.'),
+    ),
+    'figure' => array(
+      'label' => t('figure'),
+      'description' => t('A <figure> tag'),
+    ),
+    'pre' => array(
+      'label' => t('pre'),
+      'description' => t('A <pre> tag'),
+    ),
+    'precode' => array(
+      'label' => t('pre code'),
+      'description' => t('A <pre> tag and a <code> tag wrapper'),
+    ),
+    'small' => array(
+      'label' => t('small'),
+      'description' => t('A <small> tag'),
+    ),
+  );
+  return $fences;
 }
