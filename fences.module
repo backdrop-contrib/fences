@@ -193,7 +193,8 @@ function fences_get_fences_suggestion_info() {
   if (is_null($fences)) {
     $files = array();
 
-    // We need to search each module for template files, so we can't use
+    // Call hook_fences_suggestion_info for modules. We need to search each
+    // module for template files to get their paths, so we can't use
     // module_invoke_all().
     foreach (module_implements('fences_suggestion_info') as $module) {
       $function = $module . '_fences_suggestion_info';
@@ -214,6 +215,59 @@ function fences_get_fences_suggestion_info() {
                 $fences[$hook][$suggestion]['type'] = 'module';
               }
             }
+          }
+        }
+      }
+    }
+
+    // Create a list of the default theme and its base themes.
+    $theme_default = $GLOBALS['conf']['theme_default'];
+    // We can't use list_themes() here because of #761608.
+    $theme_data = _system_rebuild_theme_data();
+    foreach (array_keys($theme_data[$theme_default]->base_themes) as $base_theme) {
+      $themes[$base_theme] = 'base_theme_engine';
+    }
+    $themes[$theme_default] = 'theme_engine';
+    // Include the template.php files of the entire theme stack.
+    foreach (array_keys($themes) as $theme) {
+      include_once './' . drupal_get_path('theme', $theme) . '/template.php';
+    }
+
+    // Call hook_fences_suggestion_info for themes.
+    foreach ($themes as $theme => $type) {
+      // Search the theme for template files.
+      $files[$theme] = drupal_system_listing('/\-\-fences\-.*\.tpl\.php$/', drupal_get_path('theme', $theme), 'name', 0);
+      $function = $theme . '_fences_suggestion_info';
+      if (function_exists($function)) {
+        $result = $function();
+        if (isset($result) && is_array($result)) {
+          // Go through each of the results of hook_fences_suggestion_info().
+          foreach (array_keys($result) as $hook) {
+            foreach (array_keys($result[$hook]) as $suggestion) {
+              $template = str_replace('_', '-', $hook . '--fences-' . $suggestion) . '.tpl';
+              // Only record the suggestion if a corresponding template file is found.
+              if (isset($files[$theme][$template])) {
+                $fences[$hook][$suggestion] = $result[$hook][$suggestion];
+                // We need the project type in hook_theme().
+                $fences[$hook][$suggestion]['type'] = $type;
+              }
+            }
+          }
+        }
+      }
+      // If hook_fences_suggestion_info() doesn't exist for the theme, do a
+      // "lazy" hook implementation by parsing the file names of matching
+      // template files.
+      else {
+        foreach ($files[$theme] as $template => $data) {
+          list($hook, $suggestion) = explode('--', $template);
+          $suggestion = str_replace(array('fences-', '-multiple', '.tpl'), '', $suggestion);
+          if (!isset($fences[$hook][$suggestion])) {
+            $fences[$hook][$suggestion] = array(
+              'label'       => $suggestion,
+              'description' => t('A <@tag> tag', array('@tag' => $suggestion)),
+              'type'        => $type,
+            );
           }
         }
       }
