@@ -185,6 +185,28 @@ function fences_theme($existing, $type, $theme, $path) {
 }
 
 /**
+ * Implements hook_theme_registry_alter().
+ */
+function fences_theme_registry_alter(&$theme_registry) {
+  $fences = fences_get_fences_suggestion_info();
+
+  // Manually registering module-based suggestions means they mistakenly get
+  // preprocess and process functions registered to them.
+  $supported_hooks = array('field');
+  foreach ($supported_hooks as $hook) {
+    foreach ($fences[$hook] as $suggestion => $data) {
+      if ($fences[$hook][$suggestion]['type'] == 'module') {
+        $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
+        foreach (array($hook_suggestion, $hook_suggestion . '-multiple') as $name) {
+          unset($theme_registry[$name]['preprocess functions']);
+          unset($theme_registry[$name]['process functions']);
+        }
+      }
+    }
+  }
+}
+
+/**
  * Retrieve the hook_fences_suggestion_info data.
  */
 function fences_get_fences_suggestion_info() {
