@@ -140,6 +140,17 @@ function fences_preprocess_field(&$vars) {
   }
 }
 
+/**
+ * Implements hook_module_implements_alter().
+ */
+function fences_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'theme') {
+    // Make fences' hook_theme() run last.
+    $group = $implementations['fences'];
+    unset($implementations['fences']);
+    $implementations['fences'] = $group;
+  }
+}
 
 /**
  * Implements hook_theme().
