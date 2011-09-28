@@ -163,15 +163,19 @@ function fences_theme($existing, $type, $theme, $path) {
   $supported_hooks = array('field');
   foreach ($supported_hooks as $hook) {
     foreach ($fences[$hook] as $suggestion => $data) {
-      $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
-      $hooks[$hook_suggestion] = array(
-        'base hook'      => $hook,
-        'render element' => $existing[$hook]['render element'],
-        'type'           => $fences[$hook][$suggestion]['type'],
-        'theme path'     => $existing[$hook]['theme path'],
-        'template'       => str_replace('_', '-', $hook_suggestion),
-        'path'           => $fences[$hook][$suggestion]['path'],
-      );
+      // Manually register the suggestions for a module, but let hook_theme
+      // auto-discover theme-owned suggestions as it normally does.
+      if ($fences[$hook][$suggestion]['type'] == 'module') {
+        $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
+        $hooks[$hook_suggestion] = array(
+          'base hook'      => $hook,
+          'render element' => $existing[$hook]['render element'],
+          'type'           => $fences[$hook][$suggestion]['type'],
+          'theme path'     => $existing[$hook]['theme path'],
+          'template'       => str_replace('_', '-', $hook_suggestion),
+          'path'           => $fences[$hook][$suggestion]['path'],
+        );
+      }
     }
   }
 
