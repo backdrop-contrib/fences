@@ -156,20 +156,28 @@ function fences_module_implements_alter(&$implementations, $hook) {
  * Implements hook_theme().
  */
 function fences_theme($existing, $type, $theme, $path) {
-  dpm($type);
-  dpm($theme);
-  dpm($path);
-  dpm($existing);
-  // Supplying $fence_type here, but I would like it to be dynamically set.
-  $fence_type = 'small';
-  return array(
-    'field__fences_' . $fence_type => array(
-      'render element' => 'field',
-      'template' => 'field--fences-' . $fence_type,
-      // this will set to module/theme path by default:
-      'path' => drupal_get_path('module', 'fences') . '/templates',
-    ),
-  );
+  $hooks = array();
+
+  $fences = fences_get_fences_suggestion_info();
+
+  $supported_hooks = array('field');
+  foreach ($supported_hooks as $hook) {
+    foreach ($fences[$hook] as $suggestion => $data) {
+      $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
+      $hooks[$hook_suggestion] = array(
+        'base hook'      => $hook,
+        'render element' => $existing[$hook]['render element'],
+        // @todo This could also be 'base_theme_engine', etc.
+        'type'           => 'module',
+        'theme path'     => $existing[$hook]['theme path'],
+        'template'       => str_replace('_', '-', $hook_suggestion),
+        // @todo Make this work for projects other than fences.
+        'path'           => drupal_get_path('module', 'fences') . '/templates',
+      );
+    }
+  }
+
+  return $hooks;
 }
 
 /**
