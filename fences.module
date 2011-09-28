@@ -188,45 +188,48 @@ function fences_theme($existing, $type, $theme, $path) {
  * Retrieve the hook_fences_suggestion_info data.
  */
 function fences_get_fences_suggestion_info() {
-  $fences = $files = array();
+  $fences = &drupal_static(__FUNCTION__);
 
-  // We need to search each module for template files, so we can't use
-  // module_invoke_all().
-  foreach (module_implements('fences_suggestion_info') as $module) {
-    $function = $module . '_fences_suggestion_info';
-    if (function_exists($function)) {
-      $result = $function();
-      if (isset($result) && is_array($result)) {
-        // Search the module for template files.
-        $files[$module] = drupal_system_listing('/\-\-fences\-.*\.tpl\.php$/', drupal_get_path('module', $module), 'name', 0);
-        // Go through each of the results of hook_fences_suggestion_info().
-        foreach (array_keys($result) as $hook) {
-          foreach (array_keys($result[$hook]) as $suggestion) {
-            $template = str_replace('_', '-', $hook . '--fences-' . $suggestion) . '.tpl';
-            // Only record the suggestion if a corresponding template file is found.
-            if (isset($files[$module][$template])) {
-              $fences[$hook][$suggestion] = $result[$hook][$suggestion];
-              // We need the path and project type for hook_theme().
-              $fences[$hook][$suggestion]['path'] = dirname($files[$module][$template]->uri);
-              $fences[$hook][$suggestion]['type'] = 'module';
+  if (is_null($fences)) {
+    $files = array();
+
+    // We need to search each module for template files, so we can't use
+    // module_invoke_all().
+    foreach (module_implements('fences_suggestion_info') as $module) {
+      $function = $module . '_fences_suggestion_info';
+      if (function_exists($function)) {
+        $result = $function();
+        if (isset($result) && is_array($result)) {
+          // Search the module for template files.
+          $files[$module] = drupal_system_listing('/\-\-fences\-.*\.tpl\.php$/', drupal_get_path('module', $module), 'name', 0);
+          // Go through each of the results of hook_fences_suggestion_info().
+          foreach (array_keys($result) as $hook) {
+            foreach (array_keys($result[$hook]) as $suggestion) {
+              $template = str_replace('_', '-', $hook . '--fences-' . $suggestion) . '.tpl';
+              // Only record the suggestion if a corresponding template file is found.
+              if (isset($files[$module][$template])) {
+                $fences[$hook][$suggestion] = $result[$hook][$suggestion];
+                // We need the path and project type for hook_theme().
+                $fences[$hook][$suggestion]['path'] = dirname($files[$module][$template]->uri);
+                $fences[$hook][$suggestion]['type'] = 'module';
+              }
             }
           }
         }
       }
     }
+
+    // Sort the tags.
+    foreach (array_keys($fences) as $hook) {
+      $none = $fences[$hook]['none'];
+      unset($fences[$hook]['none']);
+      ksort($fences[$hook]);
+      $fences[$hook] = array('none' => $none) + $fences[$hook];
+    }
+
+    // Allow modules and themes to alter the fences info.
+    drupal_alter('fences_suggestion_info', $fences);
   }
-
-  // Sort the tags.
-  foreach (array_keys($fences) as $hook) {
-    $none = $fences[$hook]['none'];
-    unset($fences[$hook]['none']);
-    ksort($fences[$hook]);
-    $fences[$hook] = array('none' => $none) + $fences[$hook];
-  }
-
-  // Allow modules and themes to alter the fences info.
-  drupal_alter('fences_suggestion_info', $fences);
-
   return $fences;
 }
 
