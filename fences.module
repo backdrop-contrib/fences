@@ -210,6 +210,14 @@ function fences_get_fences_suggestion_info() {
     }
   }
 
+  // Sort the tags.
+  foreach (array_keys($fences) as $hook) {
+    $none = $fences[$hook]['none'];
+    unset($fences[$hook]['none']);
+    ksort($fences[$hook]);
+    $fences[$hook] = array('none' => $none) + $fences[$hook];
+  }
+
   // Allow modules and themes to alter the fences info.
   drupal_alter('fences_suggestion_info', $fences);
 
