@@ -1,13 +1,15 @@
 <?php
-
 /**
- * Support for the <pre> and <code> elements
- * for Drupal multivalue fields
- * http://developers.whatwg.org/grouping-content.html#the-pre-element
- * http://developers.whatwg.org/text-level-semantics.html#the-code-element
+ * @file field--fences-precode-multiple.tpl.php
+ * Wrap a multi-value field in the <pre> and <code> elements.
  *
- * These semantics may not be right for your content. We suggest you read the spec and customize this as needed. You can make a copy of this file, put it in your theme, and edit it (and clear the cache) -- and Drupal will you your copy instead of ours. (Don't alter this copy, however!)
+ * @see http://developers.whatwg.org/grouping-content.html#the-pre-element
+ * @see http://developers.whatwg.org/text-level-semantics.html#the-code-element
  *
+ * These semantics may not be right for your content. We suggest you read the
+ * spec and customize this as needed. You can put a copy of this file in your
+ * theme, edit it, clear the cache, and Drupal will use your theme's copy
+ * instead of this one.
  */
 ?>
 <div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
