@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Support for the <address> element
  * for a single Drupal field
@@ -16,7 +15,7 @@
       <?php print $label; ?>:
     </span>
   <?php endif; ?>
-  
+
   <?php print render($items[0]); ?>
 
 </address>

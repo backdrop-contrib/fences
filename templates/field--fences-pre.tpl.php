@@ -6,7 +6,7 @@
  * http://developers.whatwg.org/grouping-content.html#the-pre-element
  * http://developers.whatwg.org/text-level-semantics.html#the-code-element
  *
- * These semantics may not be right for your content. We suggest you read the spec and customize this as needed. You can make a copy of this file, put it in your theme, and edit it (and clear the cache) --Êand Drupal will you your copy instead of ours. (Don't alter this copy, however!)
+ * These semantics may not be right for your content. We suggest you read the spec and customize this as needed. You can make a copy of this file, put it in your theme, and edit it (and clear the cache) -- and Drupal will you your copy instead of ours. (Don't alter this copy, however!)
  *
  */
 ?>
@@ -21,7 +21,7 @@
       <?php print $label; ?>
     </h3>
   <?php endif; ?>
-    
+
   <?php print render($items[0]); ?>
 
 </pre>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Support for the <div> element
  * for a single Drupal field
@@ -20,7 +19,7 @@
       <?php print $label; ?>
     </h3>
   <?php endif; ?>
-  
+
   <?php print render($items[0]); ?>
 
 </div>
