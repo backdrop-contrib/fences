@@ -12,7 +12,7 @@
  * instead of this one.
  */
 ?>
-<div class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<div class="<?php print $classes; ?>"<?php print $attributes; ?>>
 
   <?php if ($element['#label_display'] == 'inline'): ?>
     <span class="field-label <?php print $title_attributes; ?>">

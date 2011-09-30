@@ -11,7 +11,7 @@
  * instead of this one.
  */
 ?>
-<address class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
+<address class="<?php print $classes; ?>"<?php print $attributes; ?>>
 
   <?php if ($element['#label_display'] == 'inline'): ?>
     <span class="field-label <?php print $title_attributes; ?>">
