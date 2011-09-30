@@ -341,6 +341,10 @@ function fences_fences_suggestion_info() {
       'label' => t('small'),
       'description' => t('A <small> tag'),
     ),
+    'ul' => array(
+      'label' => t('ul'),
+      'description' => t('A <ul> tag'),
+    ),
   );
   return $fences;
 }
