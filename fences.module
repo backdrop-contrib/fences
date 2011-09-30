@@ -128,13 +128,13 @@ function fences_preprocess_field(&$vars) {
   $field_name = $vars['element']['#field_name'];
   $suggestion = fences_get_suggestion($bundle, $field_name);
   if ($suggestion) {
-    // Place the suggestion at the front of the queue.
+    // Make fences' suggestions low priority by placing them at the front of the queue.
     $suggestion = 'field__fences_' . $suggestion;
-    array_unshift($vars['theme_hook_suggestions'], $suggestion);
-    // Add a "-multiple" suggestion if there are more than one field items.
     if (count($vars['items']) > 1) {
+      // Add a "-multiple" suggestion if there are more than one field items.
       array_unshift($vars['theme_hook_suggestions'], $suggestion . '_multiple');
     }
+    array_unshift($vars['theme_hook_suggestions'], $suggestion);
   }
 }
 
@@ -165,7 +165,7 @@ function fences_theme($existing, $type, $theme, $path) {
       // auto-discover theme-owned suggestions as it normally does.
       if ($fences[$hook][$suggestion]['type'] == 'module') {
         $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
-        foreach (array($hook_suggestion, $hook_suggestion . '-multiple') as $name) {
+        foreach (array($hook_suggestion, $hook_suggestion . '_multiple') as $name) {
           $hooks[$name] = array(
             'base hook'      => $hook,
             'render element' => $existing[$hook]['render element'],
@@ -195,7 +195,7 @@ function fences_theme_registry_alter(&$theme_registry) {
     foreach ($fences[$hook] as $suggestion => $data) {
       if ($fences[$hook][$suggestion]['type'] == 'module') {
         $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
-        foreach (array($hook_suggestion, $hook_suggestion . '-multiple') as $name) {
+        foreach (array($hook_suggestion, $hook_suggestion . '_multiple') as $name) {
           unset($theme_registry[$name]['preprocess functions']);
           unset($theme_registry[$name]['process functions']);
         }
