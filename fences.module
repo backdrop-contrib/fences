@@ -9,10 +9,7 @@
  * Implements hook_form_alter()
  */
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
-  $bundle = $form_state['build_info']['args'][0]['bundle'];
-  $field_name = $form_state['build_info']['args'][0]['field_name'];
-
-  $suggestion = fences_get_suggestion($bundle, $field_name);
+  $suggestion = fences_get_suggestion($form_state['build_info']['args'][0]['bundle'], $form_state['build_info']['args'][0]['field_name']);
 
   // Get the list of suggestions.
   $fences = fences_get_fences_suggestion_info();
@@ -124,9 +121,7 @@ function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $for
  */
 function fences_preprocess_field(&$vars) {
   // Retrieve the configured suggestion.
-  $bundle = $vars['element']['#bundle'];
-  $field_name = $vars['element']['#field_name'];
-  $suggestion = fences_get_suggestion($bundle, $field_name);
+  $suggestion = fences_get_suggestion($vars['element']['#bundle'], $vars['element']['#field_name']);
   if ($suggestion) {
     // Make fences' suggestions low priority by placing them at the front of the queue.
     $suggestion = 'field__fences_' . $suggestion;
