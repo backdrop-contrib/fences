@@ -252,8 +252,10 @@ function fences_get_fences_suggestion_info() {
     $theme_default = $GLOBALS['conf']['theme_default'];
     // We can't use list_themes() here because of #761608.
     $theme_data = _system_rebuild_theme_data();
-    foreach (array_keys($theme_data[$theme_default]->base_themes) as $base_theme) {
-      $themes[$base_theme] = 'base_theme_engine';
+    if (isset($theme_data[$theme_default]->base_themes)) {
+      foreach (array_keys($theme_data[$theme_default]->base_themes) as $base_theme) {
+        $themes[$base_theme] = 'base_theme_engine';
+      }
     }
     $themes[$theme_default] = 'theme_engine';
     // Include the template.php files of the entire theme stack.
