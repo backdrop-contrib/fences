@@ -90,6 +90,7 @@ function fences_update_fence_configuration($bundle, $fid, $field_name, $suggesti
  * the default value.
  */
 function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
+/*
   // Disable the label option.
   $form['options']['custom_label']['#default_value'] = FALSE;
 
@@ -106,6 +107,7 @@ function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form
   // Enable the element_type style to be none.
   $form['options']['element_type_enable']['#default_value'] = TRUE;
   $form['options']['element_type']['#default_value'] = 0;
+*/
 }
 
 /**
@@ -113,7 +115,7 @@ function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form
  * the default value.
  */
 function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $form_id) {
-  $form['options']['row_options']['default_field_elements']['#default_value'] = 0;
+//  $form['options']['row_options']['default_field_elements']['#default_value'] = 0;
 }
 
 /**
