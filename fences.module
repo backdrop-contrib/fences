@@ -260,7 +260,10 @@ function fences_get_fences_suggestion_info() {
     $themes[$theme_default] = 'theme_engine';
     // Include the template.php files of the entire theme stack.
     foreach (array_keys($themes) as $theme) {
-      include_once './' . drupal_get_path('theme', $theme) . '/template.php';
+      $file = './' . drupal_get_path('theme', $theme) . '/template.php';
+      if (file_exists($file)) {
+        include_once $file;
+      }
     }
 
     // Call hook_fences_suggestion_info for themes.
