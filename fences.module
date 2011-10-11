@@ -306,7 +306,7 @@ function fences_get_fences_suggestion_info() {
       }
     }
 
-    // Sort the tags.
+    // Sort the tags, but put the "no markup" option first.
     foreach (array_keys($fences) as $hook) {
       $none = $fences[$hook]['none'];
       unset($fences[$hook]['none']);
