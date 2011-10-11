@@ -5,53 +5,6 @@
  */
 
 /**
- * Implements hook_schema().
- */
-function fences_schema() {
-  $schema['fences'] = array(
-    'description' => 'Stores field wrapper configuration.',
-    'fields' => array(
-      'fences_id' => array(
-        'description' => 'The primary identifier for a wrapper suggestion.',
-        'type' => 'serial',
-        'not null' => TRUE,
-      ),
-      'machine_name' => array(
-        'description' => 'The machine name for this suggestion.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-      'bundle' => array(
-        'description' => 'The parent content type for this suggestion.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-      'fid' => array(
-        'description' => 'The field that this suggestion is linked to.',
-        'type' => 'int',
-        'default' => NULL,
-      ),
-      'field_name' => array(
-        'description' => 'The name of the field.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-      'suggestion' => array(
-        'description' => 'The wrapper suggestion itself.',
-        'type' => 'varchar',
-        'length' => 255,
-        'default' => NULL,
-      ),
-    ),
-    'primary key' => array('fences_id'),
-  );
-  return $schema;
-}
-
-/**
  * Set the initial database schema ID.
  */
 function fences_update_7100() {
