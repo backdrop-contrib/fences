@@ -4,12 +4,11 @@
  * Fences is a module providing configurable field wrappers.
  */
 
-
 /**
  * Implements hook_form_alter()
  */
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
-  $suggestion = fences_get_suggestion($form_state['build_info']['args'][0]['entity_type'], $form_state['build_info']['args'][0]['bundle'], $form_state['build_info']['args'][0]['field_name']);
+  $suggestion = fences_get_suggestion($form['#instance']['entity_type'], $form['#instance']['bundle'], $form['#instance']['field_name']);
 
   // Get the list of suggestions.
   $fences = fences_get_fences_suggestion_info();
@@ -27,12 +26,30 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_
 }
 
 /**
- * Function to return the wrapper suggestion if it exists.
+ * Returns the wrapper suggestion if it exists.
+ *
+ * @see field_info_instance()
+ *
+ * @param $entity_type
+ *   The entity type for the instance.
+ * @param $bundle_name
+ *   The bundle name for the instance.
+ * @param $field_name
+ *   The field name for the instance.
+ *
+ * @return
+ *   The fences wrapper suggestion for this field, if set.
  */
-function fences_get_suggestion($entity_type, $bundle, $field_name) {
-  $field_info = field_info_instance($entity_type, $field_name, $bundle);
+function fences_get_suggestion($entity_type, $bundle_name, $field_name) {
+  $fences = &drupal_static(__FUNCTION__, array());
 
-  return isset($field_info['fences_wrapper']) ? $field_info['fences_wrapper'] : NULL;
+  if (!isset($fences[$entity_type][$bundle_name][$field_name])) {
+    // Instance info is cached, so this isn't as non-performant as it looks.
+    $settings = field_info_instance($entity_type, $field_name, $bundle_name);
+    $fences[$entity_type][$bundle_name][$field_name] = isset($settings['fences_wrapper']) ? $settings['fences_wrapper'] : '';
+  }
+
+  return $fences[$entity_type][$bundle_name][$field_name];
 }
 
 /**
