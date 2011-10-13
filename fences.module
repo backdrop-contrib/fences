@@ -132,14 +132,6 @@ function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form
 }
 
 /**
- * @todo: Make this actually work. Currently cannot change the value from
- * the default value.
- */
-function fences_form_views_ui_edit_display_form_alter(&$form, &$form_state, $form_id) {
-//  $form['options']['row_options']['default_field_elements']['#default_value'] = 0;
-}
-
-/**
  * Implements hook_preprocess_field().
  */
 function fences_preprocess_field(&$variables) {
