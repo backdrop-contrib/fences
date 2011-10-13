@@ -53,9 +53,82 @@ function fences_get_suggestion($entity_type, $bundle_name, $field_name) {
 }
 
 /**
+ * Implements hook_form_views_ui_add_item_form_alter().
+ */
+function fences_form_views_ui_add_item_form_alter(&$form, &$form_state, $form_id) {
+  // Add our own submit handler to run before the standard one.
+  array_unshift($form['buttons']['submit']['#submit'], 'fences_views_ui_add_item_form_submit');
+}
+
+/**
+ * Submit handler which runs before views_ui_add_item_form_submit().
+ */
+function fences_views_ui_add_item_form_submit($form, &$form_state) {
+  // Sanity check; this temporary property shouldn't exist before the form is
+  // submitted.
+  if (isset($form_state['view']->fences_new_fields)) {
+    unset($form_state['view']->fences_new_fields);
+  }
+  // Loop through each of the items that were checked.
+  if (!empty($form_state['values']['name']) && is_array($form_state['values']['name'])) {
+    foreach (array_keys(array_filter($form_state['values']['name'])) as $field) {
+      // Check if the checked item is a field api field.
+      if (strpos($field, 'field_data_') === 0) {
+        // Find the field's proper name.
+        list($table, $field_name) = explode('.', $field, 2);
+        if ($cut = strpos($field_name, '$')) {
+          $field_name = substr($field_name, 0, $cut);
+        }
+        // Note that the field has just been added by adding it's name to a
+        // temporary property of the view.
+        $form_state['view']->fences_new_fields[] = $field_name;
+      }
+    }
+  }
+}
+
+/**
  * Alter the views field item form to change some of the default values.
+ *
+ * Note: we only act on an item if it is among the list of fields added to the
+ * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
  */
 function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
+  // Check if the current item is a field.
+  if ($form_state['type'] == 'field' && isset($form_state['view']->fences_new_fields)) {
+    if (!empty($form_state['view']->fences_new_fields)) {
+      // Check if the current item is one of the fields we marked earlier.
+      $key = array_search($form_state['id'], $form_state['view']->fences_new_fields);
+      if ($key !== FALSE) {
+        // Disable the label option.
+        $form['options']['custom_label']['#default_value'] = FALSE;
+
+        // Since we are altering this fieldset's defaults, expand it.
+        $form['options']['style_settings']['#collapsed'] = FALSE;
+
+        // Enable the element_type style to be none.
+        $form['options']['element_type_enable']['#default_value'] = TRUE;
+        $form['options']['element_type']['#default_value'] = 0;
+
+        // Enable the element_wrapper style to be none.
+        $form['options']['element_wrapper_type_enable']['#default_value'] = TRUE;
+        $form['options']['element_wrapper_type']['#default_value'] = 0;
+
+        // Disable the default element classes.
+        $form['options']['element_default_classes']['#default_value'] = FALSE;
+
+        // Set the field settings to use the field_api for rendering.
+        $form['options']['field_api_classes']['#default_value'] = TRUE;
+
+        // Remove this field from the list of items to alter.
+        unset($form_state['view']->fences_new_fields[$key]);
+      }
+    }
+    // Remove the temporary property set when we added items.
+    if (empty($form_state['view']->fences_new_fields)) {
+      unset($form_state['view']->fences_new_fields);
+    }
+  }
 }
 
 /**
