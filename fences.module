@@ -361,9 +361,9 @@ function fences_fences_suggestion_info() {
       'label' => t('pre'),
       'description' => t('A <pre> tag'),
     ),
-    'precode' => array(
-      'label' => t('pre code'),
-      'description' => t('A <pre> tag and a <code> tag wrapper'),
+    'pre_code' => array(
+      'label'       => t('pre code'),
+      'description' => t('Block of preformatted code'),
     ),
     'small' => array(
       'label' => t('small'),
