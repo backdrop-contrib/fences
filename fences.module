@@ -10,19 +10,34 @@
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
   $suggestion = fences_get_suggestion($form['#instance']['entity_type'], $form['#instance']['bundle'], $form['#instance']['field_name']);
 
-  // Get the list of suggestions.
-  $fences = fences_get_fences_suggestion_info();
-  foreach (array_keys($fences['field']) as $key) {
-    $options[$key] = $fences['field'][$key]['label'];
-  }
-
   $form['instance']['fences_wrapper'] = array(
     '#type' => 'select',
     '#title' => t('Wrapper markup'),
     '#default_value' => $suggestion ? $suggestion : 'div',
-    '#options' => $options,
+    '#options' => fences_get_fences_options('field'),
     '#description' => t('Choose the HTML to use to wrap the field.'),
   );
+}
+
+/**
+ * Returns a ready-made options list of fences suggestions.
+ */
+function fences_get_fences_options($theme_hook) {
+  $options = array();
+
+  // Get the list of suggestions.
+  $fences = fences_get_fences_suggestion_info();
+  foreach (array_keys($fences[$theme_hook]) as $key) {
+    $options[$key] = $fences[$theme_hook][$key]['label'] . ' — ' . $fences[$theme_hook][$key]['description'];
+  }
+
+  // Put the "no markup" option first.
+  if ($no_wrapper = $options['none']) {
+    unset($options['none']);
+    $options = array('none' => $no_wrapper) + $options;
+  }
+
+  return $options;
 }
 
 /**
@@ -321,16 +336,12 @@ function fences_get_fences_suggestion_info() {
       }
     }
 
-    // Sort the tags, but put the "no markup" option first.
-    foreach (array_keys($fences) as $hook) {
-      $none = $fences[$hook]['none'];
-      unset($fences[$hook]['none']);
-      ksort($fences[$hook]);
-      $fences[$hook] = array('none' => $none) + $fences[$hook];
-    }
-
     // Allow modules and themes to alter the fences info.
     drupal_alter('fences_suggestion_info', $fences);
+
+    foreach (array_keys($fences) as $hook) {
+      ksort($fences[$hook]);
+    }
   }
   return $fences;
 }
