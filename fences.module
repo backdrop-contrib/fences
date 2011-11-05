@@ -32,9 +32,9 @@ function fences_get_fences_options($theme_hook) {
   }
 
   // Put the "no markup" option first.
-  if ($no_wrapper = $options['none']) {
-    unset($options['none']);
-    $options = array('none' => $no_wrapper) + $options;
+  if ($no_wrapper = $options['no_wrapper']) {
+    unset($options['no_wrapper']);
+    $options = array('no_wrapper' => $no_wrapper) + $options;
   }
 
   return $options;
@@ -352,8 +352,8 @@ function fences_get_fences_suggestion_info() {
 function fences_fences_suggestion_info() {
   // Suggestions for the "field" theme hook.
   $fences['field'] = array(
-    'none' => array(
-      'label' => t('No markup'),
+    'no_wrapper' => array(
+      'label'       => t('no markup'),
       'description' => t('No wrapping HTML'),
     ),
     'address' => array(
