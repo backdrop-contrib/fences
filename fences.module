@@ -28,10 +28,23 @@ function fences_get_fences_options($theme_hook) {
   // Get the list of suggestions.
   $fences = fences_get_fences_suggestion_info();
   foreach (array_keys($fences[$theme_hook]) as $key) {
-    $options[$key] = $fences[$theme_hook][$key]['label'] . ' — ' . $fences[$theme_hook][$key]['description'];
+    $tags = '';
+    if ($fences[$theme_hook][$key]['element'] && $fences[$theme_hook][$key]['element'] != $fences[$theme_hook][$key]['label']) {
+      $tags = ' — <' . implode('> <', explode(' ', $fences[$theme_hook][$key]['element'])) . '>';
+    }
+    $option = $fences[$theme_hook][$key]['label'] . $tags . ' — ' . $fences[$theme_hook][$key]['description'];
+    if (empty($fences[$theme_hook][$key]['groups'])) {
+      $options[$key] = $option;
+    }
+    else {
+      foreach ($fences[$theme_hook][$key]['groups'] as $optgroup) {
+        $options[$optgroup][$key] = $option;
+      }
+    }
   }
 
-  // Put the "no markup" option first.
+  // Sort the option groups, but put the "no markup" option first.
+  ksort($options);
   if ($no_wrapper = $options['no_wrapper']) {
     unset($options['no_wrapper']);
     $options = array('no_wrapper' => $no_wrapper) + $options;
@@ -328,7 +341,9 @@ function fences_get_fences_suggestion_info() {
           if (!isset($fences[$hook][$suggestion])) {
             $fences[$hook][$suggestion] = array(
               'label'       => $suggestion,
+              'element'     => $suggestion,
               'description' => t('A <@tag> tag', array('@tag' => $suggestion)),
+              'groups'      => array(t('Provided by @theme_name', array('@theme_name', $theme))),
               'type'        => $type,
             );
           }
@@ -354,35 +369,50 @@ function fences_fences_suggestion_info() {
   $fences['field'] = array(
     'no_wrapper' => array(
       'label'       => t('no markup'),
+      'element'     => '',
       'description' => t('No wrapping HTML'),
     ),
     'address' => array(
-      'label' => t('address'),
-      'description' => t('An <address> tag'),
+      'label'       => t('address'),
+      'element'     => 'address',
+      'description' => t('Contact information for a page or article element'),
+      'groups'      => array(t('Sectioning')),
     ),
     'div' => array(
-      'label' => t('div'),
-      'description' => t('A semantically generic <div> tag. Should only be used as a last resort.'),
+      'label'       => t('division'),
+      'element'     => 'div',
+      'description' => t('Generic container; only use as a last resort'),
+      'groups'      => array(t('Block-level')),
     ),
     'figure' => array(
-      'label' => t('figure'),
-      'description' => t('A <figure> tag'),
+      'label'       => t('figure'),
+      'element'     => 'figure',
+      'description' => t('Figure with optional caption'),
+      'groups'      => array(t('Block-level')),
     ),
     'pre' => array(
-      'label' => t('pre'),
-      'description' => t('A <pre> tag'),
+      'label'       => t('preformatted text'),
+      'element'     => 'pre',
+      'description' => t('Block of preformatted text'),
+      'groups'      => array(t('Block-level')),
     ),
     'pre_code' => array(
-      'label'       => t('pre code'),
+      'label'       => t('preformatted code'),
+      'element'     => 'pre code',
       'description' => t('Block of preformatted code'),
+      'groups'      => array(t('Block-level')),
     ),
     'small' => array(
-      'label' => t('small'),
-      'description' => t('A <small> tag'),
+      'label'       => t('small'),
+      'element'     => 'small',
+      'description' => t('Side comment'),
+      'groups'      => array(t('Phrasing')),
     ),
     'ul' => array(
-      'label' => t('ul'),
-      'description' => t('A <ul> tag'),
+      'label'       => t('unordered list'),
+      'element'     => 'ul',
+      'description' => t('Unordered list'),
+      'groups'      => array(t('List')),
     ),
   );
   return $fences;
