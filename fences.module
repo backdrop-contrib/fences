@@ -181,10 +181,11 @@ function fences_preprocess_field(&$variables) {
  */
 function fences_css_alter(&$css) {
   // Replace the field module's CSS with our non-floating inline version.
-  if (isset($css['modules/field/theme/field.css']) && $css['modules/field/theme/field.css']['data'] == 'modules/field/theme/field.css') {
-    $css['modules/field/theme/field.css']['data'] = drupal_get_path('module', 'fences') . '/field.css';
-    if (isset($css['modules/field/theme/field-rtl.css'])) {
-      $css['modules/field/theme/field-rtl.css']['data'] = drupal_get_path('module', 'fences') . '/field-rtl.css';
+  $path = drupal_get_path('module', 'field') . '/theme';
+  if (isset($css[$path . '/field.css']) && $css[$path . '/field.css']['data'] == $path . '/field.css') {
+    $css[$path . '/field.css']['data'] = drupal_get_path('module', 'fences') . '/field.css';
+    if (isset($css[$path . '/field-rtl.css'])) {
+      $css[$path . '/field-rtl.css']['data'] = drupal_get_path('module', 'fences') . '/field-rtl.css';
     }
   }
 }
