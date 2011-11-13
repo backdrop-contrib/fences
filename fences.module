@@ -231,6 +231,17 @@ function fences_theme($existing, $type, $theme, $path) {
     }
   }
 
+  // Register theme hook suggestions for field_collection's entity.
+  if (module_exists('entity')) {
+    $hooks['entity__fences_no_wrapper'] = array(
+      'base hook'      => 'entity',
+      'render element' => $existing['entity']['render element'],
+      'type'           => 'module',
+      'theme path'     => $existing[$hook]['theme path'],
+      'function'       => 'theme_entity__fences_no_wrapper',
+    );
+  }
+
   return $hooks;
 }
 
@@ -254,6 +265,25 @@ function fences_theme_registry_alter(&$theme_registry) {
       }
     }
   }
+}
+
+/**
+ * Preprocess variables for entity.
+ */
+function fences_preprocess_entity(&$variables) {
+  if ($variables['elements']['#entity_type'] == 'field_collection_item') {
+    // Replace the default "field_collection_item" suggestion with fences'.
+    if (($pos = array_search('field_collection_item', $variables['theme_hook_suggestions'])) !== FALSE) {
+      $variables['theme_hook_suggestions'][$pos] = 'entity__fences_no_wrapper';
+    }
+  }
+}
+
+/**
+ * A "no wrapper" theme suggestion for entity.
+ */
+function theme_entity__fences_no_wrapper($variables) {
+  return drupal_render($variables['content']);
 }
 
 /**
