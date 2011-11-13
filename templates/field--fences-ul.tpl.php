@@ -22,7 +22,7 @@
 <?php endif; ?>
 
 <ul class="<?php print $classes; ?>"<?php print $attributes; ?>>
-  <li class="field-item"<?php print $item_attributes[0]; ?>>
+  <li class="field-item odd"<?php print $item_attributes[0]; ?>>
     <?php print render($items[0]); ?>
   </li>
 </ul>

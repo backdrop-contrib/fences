@@ -1,12 +1,7 @@
 <?php
 /**
- * @file field--fences-none-multiple.tpl.php
- * Wrap a multi-value field in no wrapper element.
- *
- * These semantics may not be right for your content. We suggest you read the
- * spec and customize this as needed. You can put a copy of this file in your
- * theme, edit it, clear the cache, and Drupal will use your theme's copy
- * instead of this one.
+ * @file field--fences-no-wrapper-multiple.tpl.php
+ * Render a multi-value field with no wrapper element.
  */
 ?>
 <?php if ($element['#label_display'] == 'inline'): ?>
@@ -19,6 +14,6 @@
   </h3>
 <?php endif; ?>
 
-<?php foreach ($items as $delta => $item) : ?>
+<?php foreach ($items as $delta => $item): ?>
   <?php print render($item); ?>
 <?php endforeach; ?>

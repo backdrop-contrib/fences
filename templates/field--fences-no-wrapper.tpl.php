@@ -1,12 +1,7 @@
 <?php
 /**
- * @file field--fences-none.tpl.php
- * Wrap a single-value field in no wrapper element.
- *
- * These semantics may not be right for your content. We suggest you read the
- * spec and customize this as needed. You can put a copy of this file in your
- * theme, edit it, clear the cache, and Drupal will use your theme's copy
- * instead of this one.
+ * @file field--fences-no-wrapper.tpl.php
+ * Render a single-value field with no wrapper element.
  */
 ?>
 <?php if ($element['#label_display'] == 'inline'): ?>

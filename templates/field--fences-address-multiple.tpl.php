@@ -11,22 +11,18 @@
  * instead of this one.
  */
 ?>
-<address class="<?php print $classes; ?>"<?php print $attributes; ?>>
+<?php if ($element['#label_display'] == 'inline'): ?>
+  <span class="field-label"<?php print $title_attributes; ?>>
+    <?php print $label; ?>:
+  </span>
+<?php elseif ($element['#label_display'] == 'above'): ?>
+  <h3 class="field-label"<?php print $title_attributes; ?>>
+    <?php print $label; ?>
+  </h3>
+<?php endif; ?>
 
-  <?php if ($element['#label_display'] == 'inline'): ?>
-    <span class="field-label"<?php print $title_attributes; ?>>
-      <?php print $label; ?>:
-    </span>
-  <?php elseif ($element['#label_display'] == 'above'): ?>
-    <h3 class="field-label"<?php print $title_attributes; ?>>
-      <?php print $label; ?>
-    </h3>
-  <?php endif; ?>
-
-  <?php foreach ($items as $delta => $item) : ?>
-    <div class="field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $item_attributes[$delta]; ?>>
-      <?php print render($item); ?>
-    </div>
-  <?php endforeach; ?>
-
-</address>
+<?php foreach ($items as $delta => $item): ?>
+  <address class="<?php print $classes; ?> field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $attributes; ?>>
+    <?php print render($item); ?>
+  </address>
+<?php endforeach; ?>

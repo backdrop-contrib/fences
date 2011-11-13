@@ -11,18 +11,16 @@
  * instead of this one.
  */
 ?>
-<address class="<?php print $classes; ?>"<?php print $attributes . $item_attributes[0]; ?>>
+<?php if ($element['#label_display'] == 'inline'): ?>
+  <span class="field-label"<?php print $title_attributes; ?>>
+    <?php print $label; ?>:
+  </span>
+<?php elseif ($element['#label_display'] == 'above'): ?>
+  <h3 class="field-label"<?php print $title_attributes; ?>>
+    <?php print $label; ?>
+  </h3>
+<?php endif; ?>
 
-  <?php if ($element['#label_display'] == 'inline'): ?>
-    <span class="field-label"<?php print $title_attributes; ?>>
-      <?php print $label; ?>:
-    </span>
-  <?php elseif ($element['#label_display'] == 'above'): ?>
-    <h3 class="field-label"<?php print $title_attributes; ?>>
-      <?php print $label; ?>
-    </h3>
-  <?php endif; ?>
-
+<address class="<?php print $classes; ?> field-item odd"<?php print $attributes; ?>>
   <?php print render($items[0]); ?>
-
 </address>
