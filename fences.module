@@ -257,13 +257,39 @@ function fences_theme_registry_alter(&$theme_registry) {
 }
 
 /**
+ * Preprocess variables for field_collection_item.
+ */
+function fences_preprocess_field_collection_item(&$variables) {
+dsm($variables);
+return;
+  // Retrieve the configured suggestion.
+  $suggestion = fences_get_suggestion($variables['element']['#entity_type'], $variables['element']['#bundle'], $variables['element']['#field_name']);
+  if ($suggestion) {
+    // Make fences' suggestions low priority by placing them at the front of the queue.
+    $suggestion = 'field__fences_' . $suggestion;
+    if (count($variables['items']) > 1) {
+      // Add a "-multiple" suggestion if there are more than one field items.
+      array_unshift($variables['theme_hook_suggestions'], $suggestion . '_multiple');
+    }
+    array_unshift($variables['theme_hook_suggestions'], $suggestion);
+  }
+}
+
+/**
+ * Theme suggestion for field collection items.
+ */
+function fences_field_collection_item__fences($variables) {
+ return drupal_render($variables['content']);
+}
+
+/**
  * Retrieve the hook_fences_suggestion_info data.
  */
 function fences_get_fences_suggestion_info() {
   $fences = &drupal_static(__FUNCTION__);
 
   if (is_null($fences)) {
-    $files = array();
+    $fences = $files = array();
 
     // Call hook_fences_suggestion_info for modules. We need to search each
     // module for template files to get their paths, so we can't use
