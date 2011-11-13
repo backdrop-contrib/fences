@@ -263,7 +263,7 @@ function fences_get_fences_suggestion_info() {
   $fences = &drupal_static(__FUNCTION__);
 
   if (is_null($fences)) {
-    $files = array();
+    $fences = $files = array();
 
     // Call hook_fences_suggestion_info for modules. We need to search each
     // module for template files to get their paths, so we can't use
