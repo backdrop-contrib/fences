@@ -287,6 +287,16 @@ function theme_entity__fences_no_wrapper($variables) {
 }
 
 /**
+ * Implements hook_field_info_alter().
+ */
+function fences_field_info_alter(&$info) {
+  // Change the default formatter to be the "fields only" formatter.
+  if (isset($info['field_collection']['default_formatter'])) {
+    $info['field_collection']['default_formatter'] = 'field_collection_fields';
+  }
+}
+
+/**
  * Retrieve the hook_fences_suggestion_info data.
  */
 function fences_get_fences_suggestion_info() {
