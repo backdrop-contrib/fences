@@ -433,6 +433,12 @@ function fences_fences_suggestion_info() {
       'description' => t('Generic container; only use as a last resort'),
       'groups'      => array(t('Block-level')),
     ),
+    'figcaption' => array(
+      'label'       => t('figure caption'),
+      'element'     => 'figcaption',
+      'description' => t('Caption for figure'),
+      'groups'      => array(t('Block-level')),
+    ),
     'figure' => array(
       'label'       => t('figure'),
       'element'     => 'figure',
