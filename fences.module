@@ -217,7 +217,12 @@ function fences_theme($existing, $type, $theme, $path) {
       // auto-discover theme-owned suggestions as it normally does.
       if ($fences[$hook][$suggestion]['type'] == 'module') {
         $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
-        foreach (array($hook_suggestion, $hook_suggestion . '_multiple') as $name) {
+        $hook_suggestions = array($hook_suggestion);
+        // Register the "-multiple" suggestion if that template was found.
+        if ($fences[$hook][$suggestion]['multiple']) {
+          $hook_suggestions[] = $hook_suggestion . '_multiple';
+        }
+        foreach ($hook_suggestions as $name) {
           $hooks[$name] = array(
             'base hook'      => $hook,
             'render element' => $existing[$hook]['render element'],
@@ -325,6 +330,9 @@ function fences_get_fences_suggestion_info() {
                 // We need the path and project type for hook_theme().
                 $fences[$hook][$suggestion]['path'] = dirname($files[$module][$template]->uri);
                 $fences[$hook][$suggestion]['type'] = 'module';
+                // Record if there is a "multiple-" version of the template.
+                $template = str_replace('_', '-', $hook . '--fences-' . $suggestion . '-multiple') . '.tpl';
+                $fences[$hook][$suggestion]['multiple'] = isset($files[$module][$template]) ? TRUE : FALSE;
               }
             }
           }
