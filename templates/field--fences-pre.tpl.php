@@ -1,14 +1,9 @@
 <?php
 /**
  * @file field--fences-pre.tpl.php
- * Wrap a single-value field in the <pre> element.
+ * Wrap each field value in the <pre> element.
  *
  * @see http://developers.whatwg.org/grouping-content.html#the-pre-element
- *
- * These semantics may not be right for your content. We suggest you read the
- * spec and customize this as needed. You can put a copy of this file in your
- * theme, edit it, clear the cache, and Drupal will use your theme's copy
- * instead of this one.
  */
 ?>
 <?php if ($element['#label_display'] == 'inline'): ?>
@@ -21,6 +16,8 @@
   </h3>
 <?php endif; ?>
 
-<pre class="<?php print $classes; ?> field-item odd"<?php print $attributes; ?>>
-  <?php print render($items[0]); ?>
-</pre>
+<?php foreach ($items as $delta => $item): ?>
+  <pre class="<?php print $classes; ?> field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $attributes; ?>>
+    <?php print render($item); ?>
+  </pre>
+<?php endforeach; ?>

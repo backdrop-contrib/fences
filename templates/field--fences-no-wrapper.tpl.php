@@ -1,7 +1,7 @@
 <?php
 /**
  * @file field--fences-no-wrapper.tpl.php
- * Render a single-value field with no wrapper element.
+ * Render each field value with no wrapper element.
  */
 ?>
 <?php if ($element['#label_display'] == 'inline'): ?>
@@ -14,4 +14,6 @@
   </h3>
 <?php endif; ?>
 
-<?php print render($items[0]); ?>
+<?php foreach ($items as $delta => $item): ?>
+  <?php print render($item); ?>
+<?php endforeach; ?>
