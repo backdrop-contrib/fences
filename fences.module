@@ -242,7 +242,7 @@ function fences_theme($existing, $type, $theme, $path) {
       'base hook'      => 'entity',
       'render element' => $existing['entity']['render element'],
       'type'           => 'module',
-      'theme path'     => $existing[$hook]['theme path'],
+      'theme path'     => $existing['entity']['theme path'],
       'function'       => 'theme_entity__fences_no_wrapper',
     );
   }
