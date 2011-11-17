@@ -179,7 +179,7 @@ function _fences_get_fences_suggestion_info(&$fences) {
 }
 
 /**
- * Returns a ready-made options list of fences suggestions.
+ * Helper function for fences_get_fences_options().
  */
 function _fences_get_fences_options($theme_hook) {
   $options = array();
@@ -213,7 +213,7 @@ function _fences_get_fences_options($theme_hook) {
 }
 
 /**
- * Implements hook_form_alter()
+ * Implements hook_form_FORM_ID_alter().
  */
 function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
   $suggestion = fences_get_suggestion($form['#instance']['entity_type'], $form['#instance']['bundle'], $form['#instance']['field_name']);
@@ -228,7 +228,7 @@ function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_form_views_ui_add_item_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
 function _fences_form_views_ui_add_item_form_alter(&$form, &$form_state) {
   // Add our own submit handler to run before the standard one.
@@ -236,7 +236,7 @@ function _fences_form_views_ui_add_item_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Submit handler which runs before views_ui_add_item_form_submit().
+ * Helper function for submit handler fences_views_ui_add_item_form_submit().
  */
 function _fences_views_ui_add_item_form_submit($form, &$form_state) {
   // Sanity check; this temporary property shouldn't exist before the form is
@@ -263,10 +263,11 @@ function _fences_views_ui_add_item_form_submit($form, &$form_state) {
 }
 
 /**
- * Alter the views field item form to change some of the default values.
+ * Implements hook_form_FORM_ID_alter().
  *
- * Note: we only act on an item if it is among the list of fields added to the
- * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
+ * Alter the views field item form to change some of the default values. Note:
+ * we only act on an item if it is among the list of fields added to the view's
+ * fences_new_fields property in _fences_views_ui_add_item_form_submit().
  */
 function _fences_form_views_ui_config_item_form_alter(&$form, &$form_state) {
   // Check if the current item is a field.

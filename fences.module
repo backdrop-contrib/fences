@@ -5,7 +5,7 @@
  */
 
 /**
- * Implements hook_hook_info()
+ * Implements hook_hook_info().
  */
 function fences_hook_info() {
   return array(
@@ -57,7 +57,7 @@ function fences_theme_registry_alter(&$theme_registry) {
 }
 
 /**
- * Implements hook_form_alter()
+ * Implements hook_form_FORM_ID_alter().
  */
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
   module_load_include('inc', 'fences', 'fences.admin');
@@ -65,7 +65,7 @@ function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Implements hook_form_views_ui_add_item_form_alter().
+ * Implements hook_form_FORM_ID_alter().
  */
 function fences_form_views_ui_add_item_form_alter(&$form, &$form_state) {
   module_load_include('inc', 'fences', 'fences.admin');
@@ -81,10 +81,7 @@ function fences_views_ui_add_item_form_submit($form, &$form_state) {
 }
 
 /**
- * Alter the views field item form to change some of the default values.
- *
- * Note: we only act on an item if it is among the list of fields added to the
- * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
+ * Implements hook_form_FORM_ID_alter().
  */
 function fences_form_views_ui_config_item_form_alter(&$form, &$form_state) {
   module_load_include('inc', 'fences', 'fences.admin');
@@ -92,7 +89,12 @@ function fences_form_views_ui_config_item_form_alter(&$form, &$form_state) {
 }
 
 /**
- * Returns a ready-made options list of fences suggestions.
+ * Returns a ready-made options list of fences suggestions for a given theme hook.
+ *
+ * @param $theme_hook
+ *   A string containing the theme hook.
+ * @return
+ *   An array that can be used by a #options attribute of a form.
  */
 function fences_get_fences_options($theme_hook) {
   module_load_include('inc', 'fences', 'fences.admin');
