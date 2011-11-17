@@ -177,3 +177,18 @@ function _fences_get_fences_suggestion_info(&$fences) {
     ksort($fences[$hook]);
   }
 }
+
+/**
+ * Implements hook_form_alter()
+ */
+function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
+  $suggestion = fences_get_suggestion($form['#instance']['entity_type'], $form['#instance']['bundle'], $form['#instance']['field_name']);
+
+  $form['instance']['fences_wrapper'] = array(
+    '#type' => 'select',
+    '#title' => t('Wrapper markup'),
+    '#default_value' => $suggestion ? $suggestion : 'div',
+    '#options' => fences_get_fences_options('field'),
+    '#description' => t('Choose the HTML to use to wrap the field.'),
+  );
+}
