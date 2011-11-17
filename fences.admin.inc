@@ -192,3 +192,38 @@ function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form
     '#description' => t('Choose the HTML to use to wrap the field.'),
   );
 }
+
+/**
+ * Implements hook_form_views_ui_add_item_form_alter().
+ */
+function _fences_form_views_ui_add_item_form_alter(&$form, &$form_state, $form_id) {
+  // Add our own submit handler to run before the standard one.
+  array_unshift($form['buttons']['submit']['#submit'], 'fences_views_ui_add_item_form_submit');
+}
+
+/**
+ * Submit handler which runs before views_ui_add_item_form_submit().
+ */
+function _fences_views_ui_add_item_form_submit($form, &$form_state) {
+  // Sanity check; this temporary property shouldn't exist before the form is
+  // submitted.
+  if (isset($form_state['view']->fences_new_fields)) {
+    unset($form_state['view']->fences_new_fields);
+  }
+  // Loop through each of the items that were checked.
+  if (!empty($form_state['values']['name']) && is_array($form_state['values']['name'])) {
+    foreach (array_keys(array_filter($form_state['values']['name'])) as $field) {
+      // Check if the checked item is a field api field.
+      if (strpos($field, 'field_data_') === 0) {
+        // Find the field's proper name.
+        list($table, $field_name) = explode('.', $field, 2);
+        if ($cut = strpos($field_name, '$')) {
+          $field_name = substr($field_name, 0, $cut);
+        }
+        // Note that the field has just been added by adding it's name to a
+        // temporary property of the view.
+        $form_state['view']->fences_new_fields[] = $field_name;
+      }
+    }
+  }
+}
