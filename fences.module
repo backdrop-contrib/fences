@@ -19,11 +19,76 @@ function fences_hook_info() {
 }
 
 /**
+ * Implements hook_module_implements_alter().
+ */
+function fences_module_implements_alter(&$implementations, $hook) {
+  if ($hook == 'theme') {
+    // Make fences' hook_theme() run last.
+    $group = $implementations['fences'];
+    unset($implementations['fences']);
+    $implementations['fences'] = $group;
+  }
+}
+
+/**
+ * Implements hook_field_info_alter().
+ */
+function fences_field_info_alter(&$info) {
+  // Change the default formatter to be the "fields only" formatter.
+  if (isset($info['field_collection']['default_formatter'])) {
+    $info['field_collection']['default_formatter'] = 'field_collection_fields';
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function fences_theme($existing, $type, $theme, $path) {
+  module_load_include('inc', 'fences', 'fences.admin');
+  return _fences_theme($existing, $type, $theme, $path);
+}
+
+/**
+ * Implements hook_theme_registry_alter().
+ */
+function fences_theme_registry_alter(&$theme_registry) {
+  module_load_include('inc', 'fences', 'fences.admin');
+  _fences_theme_registry_alter($theme_registry);
+}
+
+/**
  * Implements hook_form_alter()
  */
 function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
   module_load_include('inc', 'fences', 'fences.admin');
   _fences_form_field_ui_field_edit_form_alter($form, $form_state, $form_id);
+}
+
+/**
+ * Implements hook_form_views_ui_add_item_form_alter().
+ */
+function fences_form_views_ui_add_item_form_alter(&$form, &$form_state, $form_id) {
+  module_load_include('inc', 'fences', 'fences.admin');
+  _fences_form_views_ui_add_item_form_alter($form, $form_state, $form_id);
+}
+
+/**
+ * Submit handler which runs before views_ui_add_item_form_submit().
+ */
+function fences_views_ui_add_item_form_submit($form, &$form_state) {
+  module_load_include('inc', 'fences', 'fences.admin');
+  _fences_views_ui_add_item_form_submit($form, $form_state);
+}
+
+/**
+ * Alter the views field item form to change some of the default values.
+ *
+ * Note: we only act on an item if it is among the list of fields added to the
+ * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
+ */
+function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
+  module_load_include('inc', 'fences', 'fences.admin');
+  _fences_form_views_ui_config_item_form_alter($form, $form_state, $form_id);
 }
 
 /**
@@ -62,30 +127,16 @@ function fences_get_suggestion($entity_type, $bundle_name, $field_name) {
 }
 
 /**
- * Implements hook_form_views_ui_add_item_form_alter().
+ * Retrieve the hook_fences_suggestion_info data.
  */
-function fences_form_views_ui_add_item_form_alter(&$form, &$form_state, $form_id) {
-  module_load_include('inc', 'fences', 'fences.admin');
-  _fences_form_views_ui_add_item_form_alter($form, $form_state, $form_id);
-}
+function fences_get_fences_suggestion_info() {
+  $fences = &drupal_static(__FUNCTION__);
 
-/**
- * Submit handler which runs before views_ui_add_item_form_submit().
- */
-function fences_views_ui_add_item_form_submit($form, &$form_state) {
-  module_load_include('inc', 'fences', 'fences.admin');
-  _fences_views_ui_add_item_form_submit($form, $form_state);
-}
-
-/**
- * Alter the views field item form to change some of the default values.
- *
- * Note: we only act on an item if it is among the list of fields added to the
- * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
- */
-function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
-  module_load_include('inc', 'fences', 'fences.admin');
-  _fences_form_views_ui_config_item_form_alter($form, $form_state, $form_id);
+  if (is_null($fences)) {
+    module_load_include('inc', 'fences', 'fences.admin');
+    _fences_get_fences_suggestion_info($fences);
+  }
+  return $fences;
 }
 
 /**
@@ -120,34 +171,6 @@ function fences_css_alter(&$css) {
 }
 
 /**
- * Implements hook_module_implements_alter().
- */
-function fences_module_implements_alter(&$implementations, $hook) {
-  if ($hook == 'theme') {
-    // Make fences' hook_theme() run last.
-    $group = $implementations['fences'];
-    unset($implementations['fences']);
-    $implementations['fences'] = $group;
-  }
-}
-
-/**
- * Implements hook_theme().
- */
-function fences_theme($existing, $type, $theme, $path) {
-  module_load_include('inc', 'fences', 'fences.admin');
-  return _fences_theme($existing, $type, $theme, $path);
-}
-
-/**
- * Implements hook_theme_registry_alter().
- */
-function fences_theme_registry_alter(&$theme_registry) {
-  module_load_include('inc', 'fences', 'fences.admin');
-  _fences_theme_registry_alter($theme_registry);
-}
-
-/**
  * Preprocess variables for entity.
  */
 function fences_preprocess_entity(&$variables) {
@@ -164,27 +187,4 @@ function fences_preprocess_entity(&$variables) {
  */
 function theme_entity__fences_no_wrapper($variables) {
   return drupal_render($variables['content']);
-}
-
-/**
- * Implements hook_field_info_alter().
- */
-function fences_field_info_alter(&$info) {
-  // Change the default formatter to be the "fields only" formatter.
-  if (isset($info['field_collection']['default_formatter'])) {
-    $info['field_collection']['default_formatter'] = 'field_collection_fields';
-  }
-}
-
-/**
- * Retrieve the hook_fences_suggestion_info data.
- */
-function fences_get_fences_suggestion_info() {
-  $fences = &drupal_static(__FUNCTION__);
-
-  if (is_null($fences)) {
-    module_load_include('inc', 'fences', 'fences.admin');
-    _fences_get_fences_suggestion_info($fences);
-  }
-  return $fences;
 }
