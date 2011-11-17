@@ -179,6 +179,40 @@ function _fences_get_fences_suggestion_info(&$fences) {
 }
 
 /**
+ * Returns a ready-made options list of fences suggestions.
+ */
+function _fences_get_fences_options($theme_hook) {
+  $options = array();
+
+  // Get the list of suggestions.
+  $fences = fences_get_fences_suggestion_info();
+  foreach (array_keys($fences[$theme_hook]) as $key) {
+    $tags = '';
+    if ($fences[$theme_hook][$key]['element'] && $fences[$theme_hook][$key]['element'] != $fences[$theme_hook][$key]['label']) {
+      $tags = ' — <' . implode('> <', explode(' ', $fences[$theme_hook][$key]['element'])) . '>';
+    }
+    $option = $fences[$theme_hook][$key]['label'] . $tags . ' — ' . $fences[$theme_hook][$key]['description'];
+    if (empty($fences[$theme_hook][$key]['groups'])) {
+      $options[$key] = $option;
+    }
+    else {
+      foreach ($fences[$theme_hook][$key]['groups'] as $optgroup) {
+        $options[$optgroup][$key] = $option;
+      }
+    }
+  }
+
+  // Sort the option groups, but put the "no markup" option first.
+  ksort($options);
+  if ($no_wrapper = $options['no_wrapper']) {
+    unset($options['no_wrapper']);
+    $options = array('no_wrapper' => $no_wrapper) + $options;
+  }
+
+  return $options;
+}
+
+/**
  * Implements hook_form_alter()
  */
 function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
