@@ -59,17 +59,17 @@ function fences_theme_registry_alter(&$theme_registry) {
 /**
  * Implements hook_form_alter()
  */
-function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
+function fences_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
   module_load_include('inc', 'fences', 'fences.admin');
-  _fences_form_field_ui_field_edit_form_alter($form, $form_state, $form_id);
+  _fences_form_field_ui_field_edit_form_alter($form, $form_state);
 }
 
 /**
  * Implements hook_form_views_ui_add_item_form_alter().
  */
-function fences_form_views_ui_add_item_form_alter(&$form, &$form_state, $form_id) {
+function fences_form_views_ui_add_item_form_alter(&$form, &$form_state) {
   module_load_include('inc', 'fences', 'fences.admin');
-  _fences_form_views_ui_add_item_form_alter($form, $form_state, $form_id);
+  _fences_form_views_ui_add_item_form_alter($form, $form_state);
 }
 
 /**
@@ -86,9 +86,9 @@ function fences_views_ui_add_item_form_submit($form, &$form_state) {
  * Note: we only act on an item if it is among the list of fields added to the
  * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
  */
-function fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
+function fences_form_views_ui_config_item_form_alter(&$form, &$form_state) {
   module_load_include('inc', 'fences', 'fences.admin');
-  _fences_form_views_ui_config_item_form_alter($form, $form_state, $form_id);
+  _fences_form_views_ui_config_item_form_alter($form, $form_state);
 }
 
 /**

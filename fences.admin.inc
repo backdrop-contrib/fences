@@ -215,7 +215,7 @@ function _fences_get_fences_options($theme_hook) {
 /**
  * Implements hook_form_alter()
  */
-function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id){
+function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
   $suggestion = fences_get_suggestion($form['#instance']['entity_type'], $form['#instance']['bundle'], $form['#instance']['field_name']);
 
   $form['instance']['fences_wrapper'] = array(
@@ -230,7 +230,7 @@ function _fences_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form
 /**
  * Implements hook_form_views_ui_add_item_form_alter().
  */
-function _fences_form_views_ui_add_item_form_alter(&$form, &$form_state, $form_id) {
+function _fences_form_views_ui_add_item_form_alter(&$form, &$form_state) {
   // Add our own submit handler to run before the standard one.
   array_unshift($form['buttons']['submit']['#submit'], 'fences_views_ui_add_item_form_submit');
 }
@@ -268,7 +268,7 @@ function _fences_views_ui_add_item_form_submit($form, &$form_state) {
  * Note: we only act on an item if it is among the list of fields added to the
  * view's fences_new_fields property in fences_views_ui_add_item_form_submit().
  */
-function _fences_form_views_ui_config_item_form_alter(&$form, &$form_state, $form_id) {
+function _fences_form_views_ui_config_item_form_alter(&$form, &$form_state) {
   // Check if the current item is a field.
   if ($form_state['type'] == 'field' && isset($form_state['view']->fences_new_fields)) {
     if (!empty($form_state['view']->fences_new_fields)) {
