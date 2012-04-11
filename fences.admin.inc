@@ -325,6 +325,17 @@ function fences_admin_settings_form($form, &$form_state) {
     '#description' => t('Drupal’s default field markup will be used by any field that has <em>not</em> been configured while Fences is enabled. Use this option to override the default markup for all unconfigured fields.'),
   );
 
+  $form['fences_default_classes'] = array(
+    '#type' => 'radios',
+    '#title' => t('Default classes'),
+    '#default_value' => variable_get('fences_default_classes', 0),
+    '#options' => array(
+      0 => t('Use Drupal’s default classes (<code>field</code>, <code>field-name-field-NAME</code>, <code>field-type-TYPE</code>, <code>field-label-LABELTYPE</code>, <code>clearfix</code>, <code>field-item</code>, <code>odd</code>, <code>even</code>).'),
+      1 => t('Override the default classes with Fences’ single <code>field-NAME</code> class.'),
+    ),
+    '#description' => t('Drupal’s default classes are verbose and most are useless, but some themes may require them.'),
+  );
+
   $form['submit'] = array(
     '#type' => 'submit',
     '#value' => t('Save configuration'),
@@ -342,6 +353,13 @@ function fences_admin_settings_form_submit($form, &$form_state) {
   }
   else {
     variable_del('fences_default_markup');
+  }
+
+  if ($form_state['values']['fences_default_classes']) {
+    variable_set('fences_default_classes', 1);
+  }
+  else {
+    variable_del('fences_default_classes');
   }
 
   drupal_set_message(t('The configuration options have been saved.'));

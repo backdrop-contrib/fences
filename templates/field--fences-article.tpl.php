@@ -17,7 +17,7 @@
 <?php endif; ?>
 
 <?php foreach ($items as $delta => $item): ?>
-  <article class="<?php print $classes; ?> field-item <?php print $delta % 2 ? 'odd' : 'even'; ?>"<?php print $attributes; ?>>
+  <article class="<?php print $classes; ?>"<?php print $attributes; ?>>
     <?php print render($item); ?>
   </article>
 <?php endforeach; ?>
