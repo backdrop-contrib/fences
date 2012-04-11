@@ -168,6 +168,7 @@ function fences_preprocess_field(&$variables) {
   if (empty($suggestion) && variable_get('fences_default_markup', 0)) {
     $suggestion = 'div';
   }
+
   if ($suggestion) {
     // Make fences' suggestions low priority by placing them at the front of the queue.
     $suggestion = 'field__fences_' . $suggestion;
@@ -176,6 +177,32 @@ function fences_preprocess_field(&$variables) {
       array_unshift($variables['theme_hook_suggestions'], $suggestion . '_multiple');
     }
     array_unshift($variables['theme_hook_suggestions'], $suggestion);
+  }
+
+  if (variable_get('fences_default_classes', 0)) {
+    // Remove all of core's default classes.
+    $variables['classes_array'] = array_diff($variables['classes_array'], array(
+      'field',
+      'field-name-' . $variables['field_name_css'],
+      'field-type-' . $variables['field_type_css'],
+      'field-label-' . $variables['element']['#label_display'],
+    ));
+
+    // Add our lean field class.
+    if (strpos($variables['field_name_css'], 'field-') === 0) {
+      $variables['classes_array'][] = $variables['field_name_css'];
+    }
+    else {
+      $variables['classes_array'][] = 'field-' . $variables['field_name_css'];
+    }
+  }
+
+  // Core adds a "clearfix" class to the wrapper since it floats the label and
+  // the field items in its field.css if the label is inline. That's nonsense,
+  // so we remove it and add a simple "inline" class.
+  if ($variables['element']['#label_display'] == 'inline') {
+    $variables['classes_array'] = array_diff($variables['classes_array'], array('clearfix'));
+    $variables['classes_array'][] = 'inline';
   }
 }
 
