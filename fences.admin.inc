@@ -306,3 +306,43 @@ function _fences_form_views_ui_config_item_form_alter(&$form, &$form_state) {
     }
   }
 }
+
+/**
+ * Menu callback: admin settings form.
+ *
+ * @return
+ *   The settings form used by Menu block.
+ */
+function fences_admin_settings_form($form, &$form_state) {
+  $form['fences_default_markup'] = array(
+    '#type' => 'radios',
+    '#title' => t('Default “div” markup for unconfigured fields'),
+    '#default_value' => variable_get('fences_default_markup', 0),
+    '#options' => array(
+      0 => t('Use the default wrapper markup from Drupal (nested <code>div</code>s).'),
+      1 => t('Override the default wrapper markup with Fences’ lean markup (single <code>div</code> wrapper).'),
+    ),
+    '#description' => t('Drupal’s default field markup will be used by any field that has <em>not</em> been configured while Fences is enabled. Use this option to override the default markup for all unconfigured fields.'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save configuration'),
+  );
+
+  return $form;
+}
+
+/**
+ * Form submission handler.
+ */
+function fences_admin_settings_form_submit($form, &$form_state) {
+  if ($form_state['values']['fences_default_markup']) {
+    variable_set('fences_default_markup', 1);
+  }
+  else {
+    variable_del('fences_default_markup');
+  }
+
+  drupal_set_message(t('The configuration options have been saved.'));
+}
