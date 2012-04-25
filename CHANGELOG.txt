@@ -1,5 +1,7 @@
-Fences 7.x-1.x-dev, xxxx-xx-xx (development release)
+Fences 7.x-1.0, 2012-04-26
 --------------------------
+- #1352202: Add option to limit field classes
+- #1352202: Remove field-item, odd/even and clearfix classes from fields
 - #1345802: Add setting to use/override core's default field wrapper for un-configured fields
 
 Fences 7.x-1.0-beta2, 2012-04-11
