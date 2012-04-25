@@ -1,3 +1,7 @@
+Fences 7.x-1.x-dev, xxxx-xx-xx (development release)
+--------------------------
+-
+
 Fences 7.x-1.0, 2012-04-26
 --------------------------
 - #1352202: Add option to limit field classes
