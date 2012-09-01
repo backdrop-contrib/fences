@@ -14,32 +14,34 @@ function _fences_theme($existing, $type, $theme, $path) {
 
   $supported_hooks = array('field');
   foreach ($supported_hooks as $hook) {
-    foreach ($fences[$hook] as $suggestion => $data) {
-      // Manually register the suggestions for a module, but let hook_theme
-      // auto-discover theme-owned suggestions as it normally does.
-      if ($fences[$hook][$suggestion]['type'] == 'module') {
-        $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
-        $hook_suggestions = array($hook_suggestion);
-        // Register the "-multiple" suggestion if that template was found.
-        if ($fences[$hook][$suggestion]['multiple']) {
-          $hook_suggestions[] = $hook_suggestion . '_multiple';
-        }
-        foreach ($hook_suggestions as $name) {
-          $hooks[$name] = array(
-            'base hook'      => $hook,
-            'render element' => $existing[$hook]['render element'],
-            'type'           => $fences[$hook][$suggestion]['type'],
-            'theme path'     => $existing[$hook]['theme path'],
-            'template'       => str_replace('_', '-', $name),
-            'path'           => $fences[$hook][$suggestion]['path'],
-          );
+    if (!empty($existing[$hook])) {
+      foreach ($fences[$hook] as $suggestion => $data) {
+        // Manually register the suggestions for a module, but let hook_theme
+        // auto-discover theme-owned suggestions as it normally does.
+        if ($fences[$hook][$suggestion]['type'] == 'module') {
+          $hook_suggestion = $hook . '__fences_' . str_replace('-', '_', $suggestion);
+          $hook_suggestions = array($hook_suggestion);
+          // Register the "-multiple" suggestion if that template was found.
+          if ($fences[$hook][$suggestion]['multiple']) {
+            $hook_suggestions[] = $hook_suggestion . '_multiple';
+          }
+          foreach ($hook_suggestions as $name) {
+            $hooks[$name] = array(
+              'base hook'      => $hook,
+              'render element' => $existing[$hook]['render element'],
+              'type'           => $fences[$hook][$suggestion]['type'],
+              'theme path'     => $existing[$hook]['theme path'],
+              'template'       => str_replace('_', '-', $name),
+              'path'           => $fences[$hook][$suggestion]['path'],
+            );
+          }
         }
       }
     }
   }
 
   // Register theme hook suggestions for field_collection's entity.
-  if (module_exists('entity')) {
+  if (module_exists('entity') && !empty($existing['entity'])) {
     $hooks['entity__fences_no_wrapper'] = array(
       'base hook'      => 'entity',
       'render element' => $existing['entity']['render element'],
