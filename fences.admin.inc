@@ -164,7 +164,7 @@ function _fences_get_fences_suggestion_info(&$fences) {
             'label'       => $suggestion,
             'element'     => $suggestion,
             'description' => t('A <@tag> tag', array('@tag' => $suggestion)),
-            'groups'      => array(t('Provided by @theme_name', array('@theme_name', $theme))),
+            'groups'      => array(t('Provided by @theme_name', array('@theme_name' => $theme))),
             'type'        => $type,
           );
         }
