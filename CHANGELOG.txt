@@ -1,6 +1,6 @@
 Fences 7.x-1.x-dev, xxxx-xx-xx (development release)
 --------------------------
--
+- #1561244 by RoySegall and JohnAlbin: Undefined Index (with installation profiles and features?)
 
 Fences 7.x-1.0, 2012-04-26
 --------------------------
