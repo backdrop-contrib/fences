@@ -1,5 +1,6 @@
 {
   "_config_name": "fences.settings",
-  "default_classes": 0
-  "default_markup": 0,
+  "_config_static": true,
+  "default_classes": 0,
+  "default_markup": 0
 }
