@@ -1,9 +1,14 @@
 name = Fences
 description = Configurable field wrappers
-
 package = Fields
-core = 7.x
+type = module
+backdrop = 1.x
 
 dependencies[] = field
 
+stylesheets[all][] = css/field.css
+stylesheets[all][] = css/field-rtl.css
+
 configure = admin/config/content/fences
+
+

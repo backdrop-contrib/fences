@@ -1,8 +1,3 @@
-Fences 7.x-1.x-dev, xxxx-xx-xx (development release)
---------------------------
-- #1711490 by dalberts69: @theme_name not properly replaced in UI
-- #1561244 by RoySegall and JohnAlbin: Undefined Index (with installation profiles and features?)
-
 Fences 7.x-1.0, 2012-04-26
 --------------------------
 - #1352202: Add option to limit field classes

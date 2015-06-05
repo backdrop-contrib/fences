@@ -1,20 +1,20 @@
 <?php
 /**
  * @file
- * Provides install, update and un-install functions for menu_position.
+ * Provides install, update and un-install functions.
  */
-
-/**
- * Implements hook_uninstall().
- */
-function fences_uninstall() {
-  // Delete all fences variables.
-  variable_del('fences_default_markup');
-}
 
 /**
  * Set the initial database schema ID.
  */
-function fences_update_7100() {
-  // No-op.
+function fences_update_1000() {
+  $config = config('fences.settings');
+  
+  $config->set('default_classes', update_variable_get('fences_default_classes', 0));
+  $config->set('default_markup', update_variable_get('fences_default_markup', 0));
+  
+  $config->save();
+
+  update_variable_del('fences_default_classes');
+  update_variable_del('fences_default_markup');
 }
