@@ -14,20 +14,20 @@ function fences_admin_settings_form($form, &$form_state) {
   $form['default_markup'] = array(
     '#type'          => 'radios',
     '#title'         => t('Default “div” markup for unconfigured fields'),
-    '#description'   => t('Drupal’s default field markup will be used by any field that has <em>not</em> been configured while Fences is enabled. Use this option to override the default markup for all unconfigured fields.'),
+    '#description'   => t('Backdrop’s default field markup will be used by any field that has <em>not</em> been configured while Fences is enabled. Use this option to override the default markup for all unconfigured fields.'),
     '#default_value' => config_get('fences.settings', 'default_markup'),
     '#options'       => array(
-      0 => t('Use the default wrapper markup from Drupal (nested <code>div</code>s).'),
+      0 => t('Use the default wrapper markup from Backdrop (nested <code>div</code>s).'),
       1 => t('Override the default wrapper markup with Fences’ lean markup (single <code>div</code> wrapper).'),
     ),
   );
   $form['default_classes'] = array(
     '#type'          => 'radios',
     '#title'         => t('Default classes'),
-    '#description'   => t('Drupal’s default classes are verbose and most are useless, but some themes may require them.'),
+    '#description'   => t('Backdrop’s default classes are verbose and most are useless, but some themes may require them.'),
     '#default_value' => config_get('fences.settings', 'default_classes'),
     '#options'       => array(
-      0 => t('Use Drupal’s default classes (<code>field</code>, <code>field-name-field-NAME</code>, <code>field-type-TYPE</code>, <code>field-label-LABELTYPE</code>, <code>clearfix</code>, <code>field-item</code>, <code>odd</code>, <code>even</code>).'),
+      0 => t('Use Backdrop’s default classes (<code>field</code>, <code>field-name-field-NAME</code>, <code>field-type-TYPE</code>, <code>field-label-LABELTYPE</code>, <code>clearfix</code>, <code>field-item</code>, <code>odd</code>, <code>even</code>).'),
       1 => t('Override the default classes with Fences’ single <code>field-NAME</code> class.'),
     ),
   );

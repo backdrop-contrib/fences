@@ -6,11 +6,11 @@ element choice will propagate everywhere the field is used, such as teasers,
 RSS feeds and Views. You don't have to keep re-configuring the same HTML  
 element over and over again every time you display the field.
 
-Best of all, Fences provides leaner markup than Drupal 7 core! And can get rid 
+Best of all, Fences provides leaner markup than Backdrop 1 core! And can get rid 
 of the extraneous classes too!
 
 This kind of tool is needed in order to create semantic HTML5 output from 
-Drupal. Without such a tool, you have to create custom field templates in your 
+Backdrop. Without such a tool, you have to create custom field templates in your 
 theme for every field. :(
 
 Similar projects include Semantic fields, Field Wrappers and a tool inside the 
